@@ -1,0 +1,1 @@
+{"name": "Fazenda Boa Sorte · Controle leiteiro", "short_name": "Boa Sorte", "start_url": "./", "scope": "./", "display": "standalone", "background_color": "#f3f6f4", "theme_color": "#1e5a3c", "icons": [{"src": "icone.png", "sizes": "512x512", "type": "image/png", "purpose": "any"}]}
