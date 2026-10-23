@@ -281,7 +281,8 @@ const sig=s=>s==='Acima'?'ACIMA':s==='ATENÇÃO'?'ATENÇÃO':'FAIXA';
 const delta=(a,b)=>{if(a==null||b==null)return '<span class="note">-</span>';const d=a-b;return `<span class="delta ${d<0?'neg':'pos'}">${d>0?'+':''}${fmt(d)}</span>`};
 function faixaDe(t){const f=['Lote 1','Lote 2','Lote 3'].filter(l=>t>=D.lot[l].lo&&t<=D.lot[l].hi);return f.length?f.join(' / '):(t>D.lot['Lote 1'].hi?'Acima da faixa do Lote 1':'Abaixo da faixa do Lote 3')}
 
-document.getElementById('subt').textContent=`Controle ${C.at} · comparado com ${C.ant}`;
+const PRI=!C.ant; const RP=()=>C.repro?`${RP()}`:'(sem dados de reprodução neste controle)';
+document.getElementById('subt').textContent=PRI?`Controle ${C.at} · primeiro controle registrado`:`Controle ${C.at} · comparado com ${C.ant}`;
 document.querySelectorAll('.dAt').forEach(e=>e.textContent=C.at);document.querySelectorAll('.dAnt').forEach(e=>e.textContent=C.ant);document.querySelectorAll('.dConf').forEach(e=>e.textContent=C.conf);
 // abas
 const tabs=[...document.querySelectorAll('.tabbar button')];
@@ -298,28 +299,28 @@ function scatter(el,hl){
  g+=`<text x="${(ml+W-mr)/2}" y="${H-6}" text-anchor="middle" font-size="15">dias em lactação (DEL)</text>`;
  g+=`<text x="12" y="${(mt+H-mb)/2}" text-anchor="middle" font-size="15" transform="rotate(-90 12 ${(mt+H-mb)/2})">litros/dia</text>`;
  const me=hl&&byV[hl];
- D.vac.forEach(c=>{if(c.v===hl)return;const dim=me&&c.l!==me.l;g+=`<circle class="dot${dim?' dim':''}" cx="${X(c.de)}" cy="${Y(c.tot)}" r="${me?(dim?4.5:6):6}" fill="${COL[c.l]}"/>`});
- if(me){const cx=X(me.de),cy=Y(me.tot);g+=`<circle class="ring" cx="${cx}" cy="${cy}" r="15"/><circle class="dot me" cx="${cx}" cy="${cy}" r="9" fill="${COL[me.l]}"/><text class="lbl" x="${cx+(cx>W-90?-20:20)}" y="${cy+6}" font-size="18" text-anchor="${cx>W-90?'end':'start'}">${me.v}</text>`}
- if(!hl)D.vac.forEach(c=>{g+=`<circle class="hit" data-v="${c.v}" cx="${X(c.de)}" cy="${Y(c.tot)}" r="11"><title>${c.v}: ${fmt(c.tot,1)} L, ${c.de} DEL</title></circle>`});
+ D.vac.forEach(c=>{if(c.v===hl||c.de==null)return;const dim=me&&c.l!==me.l;g+=`<circle class="dot${dim?' dim':''}" cx="${X(c.de)}" cy="${Y(c.tot)}" r="${me?(dim?4.5:6):6}" fill="${COL[c.l]}"/>`});
+ if(me&&me.de!=null){const cx=X(me.de),cy=Y(me.tot);g+=`<circle class="ring" cx="${cx}" cy="${cy}" r="15"/><circle class="dot me" cx="${cx}" cy="${cy}" r="9" fill="${COL[me.l]}"/><text class="lbl" x="${cx+(cx>W-90?-20:20)}" y="${cy+6}" font-size="18" text-anchor="${cx>W-90?'end':'start'}">${me.v}</text>`}
+ if(!hl)D.vac.forEach(c=>{if(c.de==null)return;g+=`<circle class="hit" data-v="${c.v}" cx="${X(c.de)}" cy="${Y(c.tot)}" r="11"><title>${c.v}: ${fmt(c.tot,1)} L, ${c.de} DEL</title></circle>`});
  el.innerHTML=`<svg class="sc" viewBox="0 0 ${W} ${H}" role="img" aria-label="Produção por dias em lactação">${g}</svg>`;
  el.querySelectorAll('.hit').forEach(h=>h.onclick=()=>openCow(h.dataset.v));
 }
 // resumo
 const n=D.vac.length, mu=D.tot/n;
 document.getElementById('kpis').innerHTML=[
- [fmt(D.tot)+' L','Produção do dia',`${C.ant}: ${fmt(C.tot_ant)} L`],
+ [fmt(D.tot)+' L','Produção do dia',PRI?'primeiro controle':`${C.ant}: ${fmt(C.tot_ant)} L`],
  [n,'Vacas medidas','todas com 3 ordenhas'],
- [fmt(mu)+' L','Média por vaca',`${C.ant}: ${fmt(C.media_ant)} L`],
- [fmt(D.vac.reduce((a,c)=>a+c.de,0)/n,0)+' d','DEL médio','dias em lactação']
+ [fmt(mu)+' L','Média por vaca',PRI?'primeiro controle':`${C.ant}: ${fmt(C.media_ant)} L`],
+ [(()=>{const a=D.vac.filter(c=>c.de!=null);return fmt(a.reduce((s,c)=>s+c.de,0)/a.length,0)})()+' d','DEL médio','dias em lactação']
 ].map(([b,s,i])=>`<div class="kpi"><small>${s}</small><b>${b}</b><i>${i}</i></div>`).join('');
-const mx=Math.max(...D.L.map(l=>Math.max(D.lot[l].mu,D.lot[l].mu14)));
+const mx=Math.max(...D.L.map(l=>Math.max(D.lot[l].mu,D.lot[l].mu14||0)));
 document.getElementById('bars').innerHTML=D.L.map(l=>`<div class="bar-row"><span>${l}</span><div class="bar-track" style="padding-right:46px">
- <div class="bar" style="width:${D.lot[l].mu14/mx*100}%;background:var(--old)"><span>${fmt(D.lot[l].mu14)}</span></div>
+ ${D.lot[l].mu14==null?'':`<div class="bar" style="width:${D.lot[l].mu14/mx*100}%;background:var(--old)"><span>${fmt(D.lot[l].mu14)}</span></div>`}
  <div class="bar" style="width:${D.lot[l].mu/mx*100}%;background:${COL[l]}"><span><b>${fmt(D.lot[l].mu)}</b></span></div></div></div>`).join('');
 document.getElementById('faixas').innerHTML='<tr><th>Lote</th><th>Vacas</th><th>Média</th><th>Faixa</th></tr>'+D.L.map(l=>`<tr><td>${l}</td><td>${D.lot[l].n}</td><td>${fmt(D.lot[l].mu)}</td><td>${fmt(D.lot[l].lo,1)} a ${fmt(D.lot[l].hi,1)}</td></tr>`).join('');
 const [M,T,N]=D.turnos;
 document.getElementById('turnos').innerHTML=`<tr><th>Ordenha</th><th>Litros</th><th>vs manhã</th></tr><tr><td>Manhã</td><td>${fmt(M)}</td><td>-</td></tr><tr><td>Tarde</td><td>${fmt(T)}</td><td>${fmt((T/M-1)*100,1)}%</td></tr><tr><td>Noite</td><td>${fmt(N)}</td><td>${fmt((N/M-1)*100,1)}%</td></tr>`;
-document.getElementById('turnonote').textContent=`Em ${C.ant} a noite ficou ${fmt(C.noite_vs_manha_ant,1)}% abaixo da manhã.`;
+document.getElementById('turnonote').textContent=PRI?'':`Em ${C.ant} a noite ficou ${fmt(C.noite_vs_manha_ant,1)}% abaixo da manhã.`;
 document.getElementById('scLeg').innerHTML=D.L.map(l=>`<span><i style="background:${COL[l]}"></i>${l}</span>`).join('');
 
 // lotes
@@ -332,14 +333,14 @@ function drawLot(){
  document.getElementById('lothead').innerHTML=`<span><b>${s.n}</b> vacas</span><span><b>${fmt(s.tot)}</b> L</span><span>média <b>${fmt(s.mu)}</b> L</span><span>DEL médio <b>${fmt(s.de,0)}</b> d</span><span class="faixa">Faixa: 2 de cada 3 vacas entre ${fmt(s.lo,1)} e ${fmt(s.hi,1)} L</span>`;
  const rows=D.vac.filter(c=>c.l===cur).sort((a,b)=>b.tot-a.tot);
  const L=document.getElementById('lotlist');
- L.innerHTML=rows.map((c,i)=>`<button class="row" data-v="${c.v}"><span class="rk">${i+1}º</span><span><span class="id">${c.v}</span><span class="sub">DEL ${c.de}${c.parto?' · prenhe':''}</span></span><span class="val">${fmt(c.tot)} L<span class="sub">${c.t14==null?'sem '+C.ant:delta(c.tot,c.t14)+' vs '+C.ant}</span></span><span class="pill ${sig(c.s)}">${sig(c.s)}</span></button>`).join('');
+ L.innerHTML=rows.map((c,i)=>`<button class="row" data-v="${c.v}"><span class="rk">${i+1}º</span><span><span class="id">${c.v}</span><span class="sub">DEL ${c.de??'-'}${c.parto?' · prenhe':''}</span></span><span class="val">${fmt(c.tot)} L<span class="sub">${c.t14==null?(PRI?'':'sem '+C.ant):delta(c.tot,c.t14)+' vs '+C.ant}</span></span><span class="pill ${sig(c.s)}">${sig(c.s)}</span></button>`).join('');
  L.querySelectorAll('.row').forEach(r=>r.onclick=()=>openCow(r.dataset.v));
 }
 drawLot();
 
 // vaca
 const q=document.getElementById('q'), res=document.getElementById('res');
-const ALL=[...D.vac.map(c=>c.v),...D.saidas.map(x=>x.v)];
+const ALL=[...D.vac.map(c=>c.v),...D.saidas.map(x=>x.v),...(D.semmed||[]).map(x=>x.v)];
 let selV=null;
 function drawGrid(){
  document.getElementById('grid').innerHTML=D.L.map(l=>`<div><div style="font-weight:700;margin-bottom:4px;color:${COL[l]}">${l}</div><div class="tags">${D.vac.filter(c=>c.l===l).map(c=>c.v).sort((x,y)=>x.localeCompare(y,'pt',{numeric:true})).map(v=>`<button class="tag${v===selV?' on':''}" data-v="${v}">${v}</button>`).join('')}</div></div>`).join('');
@@ -356,7 +357,7 @@ function search(){
 function pick(v){selV=v;q.value=v;res.innerHTML='';drawCow(v);drawGrid()}
 function noLote(l){return (l==="Primíparas"?"nas ":"no ")+l}
 function racaTxt(c){if(!c.raca||c.raca==='-')return 'raça não informada no Prodap';return c.raca_ok?c.raca:`${c.raca} (composição incompleta no Prodap)`}
-function reproTxt(c){return c.parto?`prenhe, parto previsto ${c.parto}`:`não consta como gestante (Prodap ${C.repro})`}
+function reproTxt(c){return c.parto?`prenhe, parto previsto ${c.parto}`:`não consta como gestante ${RP()}`}
 function timeline(el,v){
  const ser=(D.series[v]||[]); if(!ser.length){el.innerHTML='';return}
  const W=520,H=240,ml=44,mr=16,mt=30,mb=46,pad=70,ymax=Math.max(70,...ser.map(p=>Math.max(p[1],p[4]||0)));
@@ -372,6 +373,7 @@ function timeline(el,v){
 function drawCow(v){
  const el=document.getElementById('cow'); const c=byV[v];
  if(!c){const s=D.saidas.find(x=>x.v===v);
+  const sm=(D.semmed||[]).find(x=>x.v===v);if(sm){el.innerHTML=`<div class="cowtop"><h3>${v}</h3></div><p class="lead">Sem produção registrada em ${C.at}: recém-parida, leite ainda sujo. Estava ${noLote(sm.l)}, DEL ${sm.de}. Fica fora das médias deste controle.</p>`;return}
   el.innerHTML=s?`<div class="cowtop"><h3>${v}</h3></div><p class="lead">Não aparece nas folhas de ${C.at}. Em ${C.ant} estava ${noLote(s.l14)}${s.t14?` com ${fmt(s.t14)} L`:''}.</p>`:'';return}
  const sg=sig(c.s), lado=sg==='ACIMA'?'acima da faixa':sg==='ATENÇÃO'?'abaixo da faixa':'dentro da faixa';
  const comp=c.t14==null?`Não tem registro de ${C.ant} (pariu depois ou estava sem medição).`:`Em ${C.ant} produziu ${fmt(c.t14)} L (${c.tot>=c.t14?'+':''}${fmt(c.tot-c.t14)} L).`;
@@ -388,11 +390,11 @@ function drawCow(v){
   <div class="fact"><small>Noite</small><b>${fmt(c.n)}</b></div>
  </div>`;
  const sec=c.sec&&c.sec!=='-'?c.sec:null;
- const ciclo=sec&&c.parto?`<b>Seca ${sec}</b><b>Pare ${c.parto}</b>`:c.parto?`<b>Pare ${c.parto}</b><i>sem secagem prevista</i>`:sec?`<b>Seca ${sec}</b><i>não consta como gestante (Prodap ${C.repro})</i>`:`<b>Sem secagem prevista</b><i>não consta como gestante (Prodap ${C.repro})</i>`;
+ const ciclo=sec&&c.parto?`<b>Seca ${sec}</b><b>Pare ${c.parto}</b>`:c.parto?`<b>Pare ${c.parto}</b><i>sem secagem prevista</i>`:sec?`<b>Seca ${sec}</b><i>não consta como gestante ${RP()}</i>`:`<b>Sem secagem prevista</b><i>não consta como gestante ${RP()}</i>`;
  el.innerHTML+=`<div class="facts">
   <div class="fact"><small>Faixa do ${c.l}</small><b>${fmt(D.lot[c.l].lo,1)} a ${fmt(D.lot[c.l].hi,1)} L</b><i>2 de cada 3 vacas</i></div>
-  <div class="fact"><small>Em ${C.ant}</small>${ant}</div>
-  <div class="fact"><small>Lactação</small><b>${c.de} dias</b></div>
+  <div class="fact"><small>${PRI?'Controle anterior':'Em '+C.ant}</small>${PRI?'<b>—</b><i>primeiro controle registrado</i>':ant}</div>
+  <div class="fact"><small>Lactação</small><b>${c.de==null?'DEL não informado':c.de+' dias'}</b></div>
   <div class="fact"><small>Secagem e parto</small>${ciclo}</div>
  </div>
  ${sug?`<div class="box"><small>Sugestão</small><b>${c.l} → ${sug[1]}</b>${D.hist[v]?`<span>${D.hist[v]}</span>`:''}</div>`:(D.hist[v]?`<div class="box"><small>Histórico</small><span>${D.hist[v]}</span></div>`:'')}
@@ -417,9 +419,9 @@ function leitura(c){
  p.push(`<p><b>Posição no lote:</b> ${pos}ª de ${lot.length} vacas do ${c.l} em produção.</p>`);
  p.push(`<p><b>Faixa do lote:</b> ${fmt(D.lot[c.l].lo,1)} a ${fmt(D.lot[c.l].hi,1)} L. Ela produziu ${fmt(c.tot)} L, ${sig(c.s)==='ACIMA'?'acima':sig(c.s)==='ATENÇÃO'?'abaixo':'dentro'} dessa faixa.</p>`);
  if(c.t14!=null)p.push(`<p><b>Desde ${C.ant}:</b> ${c.tot>=c.t14?'subiu':'caiu'} ${fmt(Math.abs(c.tot-c.t14))} L (${fmt(Math.abs(c.tot/c.t14-1)*100,1)}%). Na fazenda, as mesmas vacas ${C.var_mesmas_vacas_pct<0?'caíram':'subiram'} em média ${fmt(Math.abs(C.var_mesmas_vacas_pct),1)}% no período.</p>`);
- else p.push(`<p><b>Desde ${C.ant}:</b> sem registro em ${C.ant}.</p>`);
+ else if(!PRI)p.push(`<p><b>Desde ${C.ant}:</b> sem registro em ${C.ant}.</p>`);
  p.push(`<p><b>Ordenhas:</b> produziu mais na ${t[0][0]} (${fmt(t[0][1])} L) e menos na ${t[2][0]} (${fmt(t[2][1])} L).</p>`);
- p.push(`<p><b>Lactação:</b> ${c.de} dias${c.sec&&c.sec!=='-'?`; secagem prevista para ${c.sec}`:''}.</p>`);
+ p.push(`<p><b>Lactação:</b> ${c.de==null?'DEL não informado':c.de+' dias'}${c.sec&&c.sec!=='-'?`; secagem prevista para ${c.sec}`:''}.</p>`);
  p.push(`<p class="note">Leitura feita só com os números do controle; não é diagnóstico.</p>`);
  return p.join('');
 }
@@ -460,6 +462,13 @@ document.querySelectorAll('.dRepro').forEach(e=>e.textContent=C.repro);
  const gp={};a.forEach(p=>{(gp[p[1]]=gp[p[1]]||[]).push(p)});
  document.getElementById('partos').innerHTML=a.length?Object.entries(gp).map(([d,l])=>`<div><b class="l">${d} · em ${dd(d)} dias</b><div>${l.map(p=>(known(p[0])?V(p[0]):`<b>${p[0]}</b>`)+`<span class="note"> ${p[2]}</span>`).join(' ')}</div></div>`).join(''):'<p class="note">Nenhum parto previsto nos próximos 60 dias.</p>'})();
 scatter(document.getElementById('scAll'));
+if(PRI){
+ const lg=document.querySelector('.dAnt');if(lg)lg.parentElement.hidden=true;
+ const box=id=>document.getElementById(id).closest('.panel');
+ box('repete').hidden=true; box('mud').hidden=true; box('partos').hidden=true;
+ document.getElementById('sug').innerHTML='<p class="note">Neste controle não houve sugestões de troca de lote.</p>';document.getElementById('so05').innerHTML='';
+ document.querySelector('#logistica > p.note').insertAdjacentHTML('afterend','<div class="panel"><p class="note">14/09 foi o primeiro controle registrado: não há configuração anterior para comparar nem dados de reprodução.</p></div>');
+}
 try{const t=localStorage.getItem('tab');if(t)show(t)}catch(e){}
 }
 </script>
