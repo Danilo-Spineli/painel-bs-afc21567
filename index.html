@@ -251,7 +251,9 @@ details.read .body p{margin:0}
 <script>
 let D;
 const qs=new URLSearchParams(location.search), escolhido=(qs.get('c')||'').replace(/[^0-9-]/g,'');
-const fx=(u)=>fetch(u+(u.includes('?')?'&':'?')+'v='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()});
+let OFF=false;
+try{if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js')}catch(e){}
+const fx=(u)=>fetch(u+(u.includes('?')?'&':'?')+'v='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;if(r.headers.get('X-Salvo'))OFF=true;return r.json()});
 const isoBR=id=>id.split('-').reverse().join('/');
 let LISTA=[];
 function abre(){document.getElementById('sheet').hidden=false}
@@ -268,10 +270,12 @@ function desenhaLista(cur){
  el.querySelectorAll('.ctl').forEach(b=>b.onclick=()=>{if(b.dataset.id===cur){fecha();return}ir(b.dataset.id)});
 }
 fx('controles/lista.json').catch(()=>[]).then(l=>{LISTA=Array.isArray(l)?l:[];
+ setTimeout(()=>LISTA.forEach(c=>fetch('controles/'+c.id+'.json').catch(()=>{})),3000);
  const ehAntigo=escolhido&&LISTA.some(c=>c.id===escolhido)&&LISTA[0].id!==escolhido;
  return (ehAntigo?fx('controles/'+escolhido+'.json'):fx('dados.json')).then(j=>{D=j;init();desenhaLista(D.cfg.data_iso);
+  if(OFF)document.querySelector('main').insertAdjacentHTML('afterbegin',`<div class="antigo" style="background:var(--neutral-bg)"><span>Sem internet: mostrando os dados salvos no celular (controle de <b>${D.cfg.at}</b>).</span></div>`);
   if(ehAntigo){document.querySelector('main').insertAdjacentHTML('afterbegin',`<div class="antigo"><span>Você está vendo o controle antigo de <b>${isoBR(escolhido)}</b>.</span><button id="volta">Voltar ao atual</button></div>`);document.getElementById('volta').onclick=()=>ir(LISTA[0].id)}
- })}).catch(()=>{document.querySelector('main').insertAdjacentHTML('afterbegin','<div class="panel" style="margin-top:16px">Não consegui carregar os dados. Verifique a internet e abra de novo.</div>')});
+ })}).catch(()=>{document.querySelector('main').insertAdjacentHTML('afterbegin',`<div class="panel" style="margin-top:16px">${escolhido?'Este controle ainda não está salvo no celular. Abra uma vez com internet para ele ficar disponível sem internet.':'Não consegui carregar os dados. Verifique a internet e abra de novo.'} ${escolhido?'<p><a href="./">Voltar ao atual</a></p>':''}</div>`)});
 function init(){
 const C=D.cfg;
 const fmt=(x,n=2)=>x==null?'-':x.toLocaleString('pt-BR',{minimumFractionDigits:n,maximumFractionDigits:n});
@@ -281,7 +285,7 @@ const sig=s=>s==='Acima'?'ACIMA':s==='ATENÇÃO'?'ATENÇÃO':'FAIXA';
 const delta=(a,b)=>{if(a==null||b==null)return '<span class="note">-</span>';const d=a-b;return `<span class="delta ${d<0?'neg':'pos'}">${d>0?'+':''}${fmt(d)}</span>`};
 function faixaDe(t){const f=['Lote 1','Lote 2','Lote 3'].filter(l=>t>=D.lot[l].lo&&t<=D.lot[l].hi);return f.length?f.join(' / '):(t>D.lot['Lote 1'].hi?'Acima da faixa do Lote 1':'Abaixo da faixa do Lote 3')}
 
-const PRI=!C.ant; const RP=()=>C.repro?`${RP()}`:'(sem dados de reprodução neste controle)';
+const PRI=!C.ant; const RP=()=>C.repro?`(Prodap ${C.repro})`:'(sem dados de reprodução neste controle)';
 document.getElementById('subt').textContent=PRI?`Controle ${C.at} · primeiro controle registrado`:`Controle ${C.at} · comparado com ${C.ant}`;
 document.querySelectorAll('.dAt').forEach(e=>e.textContent=C.at);document.querySelectorAll('.dAnt').forEach(e=>e.textContent=C.ant);document.querySelectorAll('.dConf').forEach(e=>e.textContent=C.conf);
 // abas
