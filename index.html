@@ -318,6 +318,7 @@ function search(){
  res.querySelectorAll('button').forEach(b=>b.onclick=()=>pick(b.dataset.v));
 }
 function pick(v){selV=v;q.value=v;res.innerHTML='';drawCow(v);drawGrid()}
+function noLote(l){return (l==="Primíparas"?"nas ":"no ")+l}
 function racaTxt(c){if(!c.raca||c.raca==='-')return 'raça não informada no Prodap';return c.raca_ok?c.raca:`${c.raca} (composição incompleta no Prodap)`}
 function reproTxt(c){return c.parto?`prenhe, parto previsto ${c.parto}`:`não consta como gestante (Prodap ${C.repro})`}
 function timeline(el,v){
@@ -335,7 +336,7 @@ function timeline(el,v){
 function drawCow(v){
  const el=document.getElementById('cow'); const c=byV[v];
  if(!c){const s=D.saidas.find(x=>x.v===v);
-  el.innerHTML=s?`<div class="cowtop"><h3>${v}</h3></div><p class="lead">Não aparece nas folhas de ${C.at}. Em ${C.ant} estava no ${s.l14}${s.t14?` com ${fmt(s.t14)} L`:''}.</p>`:'';return}
+  el.innerHTML=s?`<div class="cowtop"><h3>${v}</h3></div><p class="lead">Não aparece nas folhas de ${C.at}. Em ${C.ant} estava ${noLote(s.l14)}${s.t14?` com ${fmt(s.t14)} L`:''}.</p>`:'';return}
  const sg=sig(c.s), lado=sg==='ACIMA'?'acima da faixa':sg==='ATENÇÃO'?'abaixo da faixa':'dentro da faixa';
  const comp=c.t14==null?`Não tem registro de ${C.ant} (pariu depois ou estava sem medição).`:`Em ${C.ant} produziu ${fmt(c.t14)} L (${c.tot>=c.t14?'+':''}${fmt(c.tot-c.t14)} L).`;
  const sug=D.sug.find(x=>x[0]===v);
@@ -360,7 +361,7 @@ function drawCow(v){
  </div>
  ${sug?`<div class="box"><small>Sugestão</small><b>${c.l} → ${sug[1]}</b>${D.hist[v]?`<span>${D.hist[v]}</span>`:''}</div>`:(D.hist[v]?`<div class="box"><small>Histórico</small><span>${D.hist[v]}</span></div>`:'')}
  <p class="note" style="margin:0">Raça: ${racaTxt(c)}</p>
- ${c.l14&&c.l14!==c.l?`<p class="note">Em ${C.ant} estava no ${c.l14}.</p>`:''}
+ ${c.l14&&c.l14!==c.l?`<p class="note">Em ${C.ant} estava ${noLote(c.l14)}.</p>`:''}
  <details class="read" id="extra"><summary>Ver gráfico e leitura da vaca</summary><div class="body">
   <div style="font-weight:700">Produção × dias em lactação</div>
   <div id="scCow"></div>
