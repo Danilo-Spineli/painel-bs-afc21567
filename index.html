@@ -29,7 +29,21 @@ header.top{background:var(--bg)}
 .brand span{color:var(--muted);font-size:.85rem}
 .brand-logo{flex-wrap:nowrap;align-items:center;justify-content:flex-start;gap:10px}
 .brandtxt{display:grid;gap:4px;min-width:0}
-.brand-logo h1{white-space:nowrap;font-size:min(1.3rem,calc((100vw - 80px)/17.4))}
+.brand-logo h1{white-space:nowrap;font-size:min(1.3rem,calc((100vw - 132px)/17.4))}
+.menubtn{margin-left:auto;flex:none;width:44px;height:44px;display:grid;place-items:center;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font-size:1.35rem;line-height:1;cursor:pointer}
+.menubtn:focus-visible,.ctl:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.sheet{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.45);display:flex;justify-content:flex-end}
+.sheet .in{background:var(--bg);width:min(340px,88vw);height:100%;padding:calc(env(safe-area-inset-top,0px) + 16px) 16px calc(env(safe-area-inset-bottom,0px) + 16px);display:grid;align-content:start;gap:10px;overflow-y:auto;box-shadow:-8px 0 24px rgba(0,0,0,.25)}
+.sheet .hd{display:flex;justify-content:space-between;align-items:center}
+.sheet h2{margin:0}
+.ctl{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;text-align:left;width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit;cursor:pointer}
+.ctl b{font:700 1.25rem var(--display)}
+.ctl small{color:var(--muted);font-size:.88rem;grid-column:1}
+.ctl .tagc{grid-row:1/3;grid-column:2;font:700 .78rem var(--body);padding:4px 9px;border-radius:999px;background:var(--neutral-bg);color:var(--muted)}
+.ctl[aria-current="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.ctl[aria-current="true"] .tagc{background:var(--accent);color:var(--surface)}
+.antigo{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--warn-bg);color:var(--fg);font-size:.95rem}
+.antigo button{font:700 .95rem var(--body);padding:8px 12px;border-radius:8px;border:0;background:var(--accent);color:var(--surface);cursor:pointer}
 .trevo{height:38px;width:auto;flex:none}
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:10;display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
 .tabbar button{font:700 .78rem var(--body);background:none;border:0;color:var(--muted);padding:8px 2px 10px;min-height:58px;display:grid;justify-items:center;gap:2px;cursor:pointer}
@@ -168,7 +182,8 @@ details.read .body p{margin:0}
 .fact.wide{grid-column:1/-1}
 </style>
 
-<header class="top"><div class="wrap brand brand-logo"><img class="trevo" src="logo.png" alt="Trevo da Fazenda Boa Sorte"><div class="brandtxt"><h1>Fazenda Boa Sorte · Controle leiteiro</h1><span id="subt"></span></div></div></header>
+<header class="top"><div class="wrap brand brand-logo"><img class="trevo" src="logo.png" alt="Trevo da Fazenda Boa Sorte"><div class="brandtxt"><h1>Fazenda Boa Sorte · Controle leiteiro</h1><span id="subt"></span></div><button class="menubtn" id="menubtn" aria-label="Controles anteriores" aria-haspopup="dialog">☰</button></div></header>
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-label="Controles"><div class="in"><div class="hd"><h2>Controles</h2><button class="menubtn" id="fecha" aria-label="Fechar">✕</button></div><p class="note">O app sempre abre no controle mais recente.</p><div id="ctls" style="display:grid;gap:8px"></div></div></div>
 <nav class="tabbar" role="tablist">
   <button role="tab" data-tab="resumo" aria-selected="true"><span class="ico">▤</span>Resumo</button>
   <button role="tab" data-tab="lotes" aria-selected="false"><span class="ico">☰</span>Lotes</button>
@@ -235,7 +250,28 @@ details.read .body p{margin:0}
 
 <script>
 let D;
-fetch('dados.json?'+Date.now(),{cache:'no-store'}).then(r=>r.json()).then(j=>{D=j;init()}).catch(()=>{document.querySelector('main').insertAdjacentHTML('afterbegin','<div class="panel" style="margin-top:16px">Não consegui carregar os dados. Verifique a internet e abra de novo.</div>')});
+const qs=new URLSearchParams(location.search), escolhido=(qs.get('c')||'').replace(/[^0-9-]/g,'');
+const fx=(u)=>fetch(u+(u.includes('?')?'&':'?')+'v='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()});
+const isoBR=id=>id.split('-').reverse().join('/');
+let LISTA=[];
+function abre(){document.getElementById('sheet').hidden=false}
+function fecha(){document.getElementById('sheet').hidden=true}
+document.getElementById('menubtn').onclick=abre;
+document.getElementById('fecha').onclick=fecha;
+document.getElementById('sheet').onclick=e=>{if(e.target.id==='sheet')fecha()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')fecha()});
+function ir(id){const atual=LISTA.length&&LISTA[0].id===id;location.href=location.pathname+(atual?'':'?c='+id)}
+function desenhaLista(cur){
+ const el=document.getElementById('ctls');
+ if(!LISTA.length){el.innerHTML='<p class="note">Ainda não há controles anteriores guardados.</p>';return}
+ el.innerHTML=LISTA.map((c,i)=>`<button class="ctl" data-id="${c.id}" aria-current="${c.id===cur}"><b>${isoBR(c.id)}</b><small>${c.n} vacas · ${c.tot.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2})} L no dia</small><span class="tagc">${i===0?'ATUAL':c.id===cur?'ABERTO':'ABRIR'}</span></button>`).join('');
+ el.querySelectorAll('.ctl').forEach(b=>b.onclick=()=>{if(b.dataset.id===cur){fecha();return}ir(b.dataset.id)});
+}
+fx('controles/lista.json').catch(()=>[]).then(l=>{LISTA=Array.isArray(l)?l:[];
+ const ehAntigo=escolhido&&LISTA.some(c=>c.id===escolhido)&&LISTA[0].id!==escolhido;
+ return (ehAntigo?fx('controles/'+escolhido+'.json'):fx('dados.json')).then(j=>{D=j;init();desenhaLista(D.cfg.data_iso);
+  if(ehAntigo){document.querySelector('main').insertAdjacentHTML('afterbegin',`<div class="antigo"><span>Você está vendo o controle antigo de <b>${isoBR(escolhido)}</b>.</span><button id="volta">Voltar ao atual</button></div>`);document.getElementById('volta').onclick=()=>ir(LISTA[0].id)}
+ })}).catch(()=>{document.querySelector('main').insertAdjacentHTML('afterbegin','<div class="panel" style="margin-top:16px">Não consegui carregar os dados. Verifique a internet e abra de novo.</div>')});
 function init(){
 const C=D.cfg;
 const fmt=(x,n=2)=>x==null?'-':x.toLocaleString('pt-BR',{minimumFractionDigits:n,maximumFractionDigits:n});

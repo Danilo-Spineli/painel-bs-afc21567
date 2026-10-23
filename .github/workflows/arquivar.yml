@@ -1,0 +1,18 @@
+name: Arquivar controle
+on:
+  push:
+    branches: [main]
+    paths: [dados.json]
+permissions:
+  contents: write
+jobs:
+  arquivar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 arquivar.py
+      - run: |
+          git config user.name "Painel"
+          git config user.email "painel@users.noreply.github.com"
+          git add controles
+          git diff --cached --quiet || (git commit -m "Arquivo do controle" && git push)
