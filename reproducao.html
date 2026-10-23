@@ -283,3 +283,4 @@ Promise.all([fx('reproducao.json'),fx('dados.json').catch(()=>null)]).then(([R,D
  try{const t=localStorage.getItem('rtab');if(t)show(t)}catch(e){}
 }).catch(()=>{document.querySelector('main').insertAdjacentHTML('afterbegin','<div class="panel" style="margin-top:16px">Não consegui carregar a reprodução. Verifique a internet e abra de novo.</div>')});
 </script>
+<script src="instalar.js"></script>
