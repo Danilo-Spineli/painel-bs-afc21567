@@ -1,5 +1,5 @@
 // Guarda o app e os dados no celular para abrir sem internet.
-const CACHE='painel-v2';
+const CACHE='painel-v3';
 const BASE=['./','index.html','logo.png','manifest.json','icone-192.png','icone.png','apple-icon.png','dados.json','controles/lista.json','reproducao.html','reproducao.json'];
 const chave=u=>{const x=new URL(u);return x.origin+x.pathname};
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>Promise.all(BASE.map(p=>fetch(p,{cache:'no-store'}).then(r=>r.ok&&c.put(chave(new URL(p,self.registration.scope)),r)).catch(()=>{})))).then(()=>self.skipWaiting()))});
@@ -10,7 +10,7 @@ self.addEventListener('fetch',e=>{
  const url=new URL(req.url);
  if(url.origin!==location.origin){ // fontes do Google: usa a guardada, senão busca e guarda
   e.respondWith(caches.match(req).then(m=>m||fetch(req).then(r=>{const cp=r.clone();caches.open(CACHE).then(c=>c.put(req,cp));return r})));return}
- const k=req.mode==='navigate'?chave(new URL('./',self.registration.scope)):chave(req.url);
+ let k=chave(req.url);if(k.endsWith('/index.html'))k=k.slice(0,-10);
  const rede=fetch(req,{cache:'no-store'}).then(r=>{if(r.ok){const cp=r.clone();caches.open(CACHE).then(c=>c.put(k,cp))}return r});
  const espera=new Promise((ok,no)=>setTimeout(no,5000));
  e.respondWith(Promise.race([rede,espera]).catch(()=>caches.match(k).then(m=>m?salvo(m):rede)));
