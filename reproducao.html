@@ -207,6 +207,7 @@ details.read .body p{margin:0}
 </nav>
 <main class="wrap">
 <section id="resumo">
+ <div class="panel" id="atencao" hidden><h2>Atenção</h2><div class="kv" id="latenc" style="margin-top:6px"></div></div>
  <div class="kpis" id="kpis"></div>
  <div class="panel"><h2>Previsão por mês</h2><p class="note">Partos previstos, secagens previstas e quantas vacas devem estar em lactação, segundo o Prodap.</p><div class="tbl" style="margin-top:8px"><table id="prev"></table></div></div>
  <div class="panel"><h2>Gestantes por touro</h2><div class="bars" id="touros" style="margin-top:8px"></div></div>
@@ -253,6 +254,9 @@ Promise.all([fx('reproducao.json'),fx('dados.json').catch(()=>null)]).then(([R,D
  const gp={};[...G].sort((a,b)=>toD(a.parto)-toD(b.parto)).forEach(g=>{const d=toD(g.parto),k=d.getFullYear()*12+d.getMonth();(gp[k]=gp[k]||{d,a:[]}).a.push(g)});
  $('lpartos').innerHTML=Object.values(gp).map(({d,a})=>`<div class="panel mes"><h3>${MES[d.getMonth()]}/${d.getFullYear()}<span>${a.length} parto${a.length>1?'s':''} · ${a.filter(g=>g.cat==='novilha').length} novilha(s)</span></h3><div>${a.map(chip).join('')}</div></div>`).join('');
  $('tsec').innerHTML='<tr><th>Brinco</th><th>Secagem</th><th>Quando</th><th>Parto previsto</th></tr>'+[...R.secar].sort((a,b)=>toD(a.sec)-toD(b.sec)).map(s=>`<tr class="click" data-v="${s.v}"><td class="brinco">${s.v}</td><td>${s.sec}</td><td>${D&&!byC[s.v]?`<b>já secou</b><br><span class="note">não ordenhada em ${D.cfg.at}</span>`:quando(s.sec)}</td><td>${s.parto}</td></tr>`).join('');
+ // Regra do Danilo: parto previsto já passou e a vaca não aparece no controle = possível parto atrasado
+ const atras=D?G.filter(g=>dias(g.parto)<0&&!byC[g.v]):[];
+ if(atras.length){$('atencao').hidden=false;$('latenc').innerHTML=`<div><b class="l">Parto previsto já passou e não pariu (sem medida no controle de ${D.cfg.at})</b><div>${atras.map(g=>`<button class="chipv" data-v="${g.v}">${g.v}<small>previsto ${g.parto.slice(0,5)} · ${-dias(g.parto)} dias de atraso</small></button>`).join('')}</div></div>`}
  const vz=D?D.vac.filter(c=>!byG[c.v]):[];
  $('vznote').textContent=D?`${vz.length} vacas medidas no controle de ${D.cfg.at} não constam como gestantes no Prodap de ${R.data}. Isso não confirma que estejam vazias: pode ser só diferença de data entre as duas fontes.`:'Sem controle carregado para cruzar.';
  $('lvaz').innerHTML=(D?D.L:[]).map(l=>{const a=vz.filter(c=>c.l===l).sort((x,y)=>(y.de||0)-(x.de||0));return a.length?`<div><b class="l">${l} · ${a.length}</b><div>${a.map(c=>`<button class="chipv" data-v="${c.v}">${c.v}<small>DEL ${c.de??'-'}</small></button>`).join('')}</div></div>`:''}).join('');
@@ -262,7 +266,7 @@ Promise.all([fx('reproducao.json'),fx('dados.json').catch(()=>null)]).then(([R,D
   let h=`<div class="cowtop"><h3>${v}</h3>${g?`<span class="pill ACIMA">GESTANTE</span>`:`<span class="pill">NÃO CONSTA COMO GESTANTE</span>`}</div>`;
   if(D&&!c&&g&&g.cat!=='novilha')h+=`<p class="note" style="margin:0">Não aparece no controle de ${D.cfg.at}: não estava sendo ordenhada.</p>`;
   if(c)h+=`<p class="note" style="margin:0">Controle de ${D.cfg.at}: ${c.l} · ${c.tot.toLocaleString('pt-BR',{minimumFractionDigits:2})} L/dia · DEL ${c.de??'-'}</p>`;
-  if(g)h+=`<div class="facts"><div class="fact"><small>Parto previsto</small><b>${g.parto}</b><i>${dias(g.parto)<0&&D?(byC[v]?`data passou · ordenhada em ${D.cfg.at}`:`data passou · não ordenhada em ${D.cfg.at}`):quando(g.parto)}</i></div><div class="fact"><small>Inseminação</small><b>${g.ins}</b><i>${g.doses} dose${g.doses>1?'s':''} · touro ${g.touro}</i></div><div class="fact"><small>Situação</small><b>${st(g)}</b><i>${D&&g.cat!=='novilha'?(byC[v]?`ordenhada em ${D.cfg.at}`:`não ordenhada em ${D.cfg.at}`):''}${g.ult?` · último parto ${g.ult}`:''}</i></div><div class="fact"><small>Partos · IEP</small><b>${g.partos??'-'} parto${g.partos===1?'':'s'}</b><i>${g.iep?'IEP '+g.iep+' dias':'sem IEP'}</i></div></div><p class="note" style="margin:0">Raça: ${g.raca}</p>`;
+  if(g)h+=`<div class="facts"><div class="fact"><small>Parto previsto</small><b>${g.parto}</b><i>${dias(g.parto)<0&&D?(byC[v]?`data passou · ordenhada em ${D.cfg.at}`:`<span class="passou">ATENÇÃO: ${-dias(g.parto)} dias de atraso, sem medida em ${D.cfg.at}</span>`):quando(g.parto)}</i></div><div class="fact"><small>Inseminação</small><b>${g.ins}</b><i>${g.doses} dose${g.doses>1?'s':''} · touro ${g.touro}</i></div><div class="fact"><small>Situação</small><b>${st(g)}</b><i>${D&&g.cat!=='novilha'?(byC[v]?`ordenhada em ${D.cfg.at}`:`não ordenhada em ${D.cfg.at}`):''}${g.ult?` · último parto ${g.ult}`:''}</i></div><div class="fact"><small>Partos · IEP</small><b>${g.partos??'-'} parto${g.partos===1?'':'s'}</b><i>${g.iep?'IEP '+g.iep+' dias':'sem IEP'}</i></div></div><p class="note" style="margin:0">Raça: ${g.raca}</p>`;
   if(s)h+=`<div class="box"><small>Secagem</small><b>${s.sec}</b><span>${D&&!byC[v]?`já secou (não ordenhada em ${D.cfg.at})`:quando(s.sec)}</span></div>`;
   if(!g)h+=`<p class="note">Não está na folha de gestantes do Prodap de ${R.data}.</p>`;
   el.innerHTML=h;

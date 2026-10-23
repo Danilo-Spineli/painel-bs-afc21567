@@ -14,3 +14,8 @@ Site estático (GitHub Pages) instalado como app no celular.
 - Substitua `reproducao.json` inteiro (não tem histórico; sempre o Prodap mais recente). Campos: `data`, `gestantes[]` (v, cat, ult, ins, doses, touro, parto, raca, iep, partos), `secar[]` (v, parto, sec), `resumo`, `touros`, `previsao[]` (mês, partos novilhas, partos vacas, total, secagens, matrizes em lactação).
 - Regra do Danilo: vaca que não aparece no último controle de leite não está sendo ordenhada (tratar como seca). A tela cruza isso sozinha com `dados.json`.
 - Confira: total de gestantes, contagem por categoria e por touro iguais ao PDF.
+
+## Regras do Danilo (valem para toda atualização)
+1. Vaca que não aparece no controle de leite não está sendo ordenhada: tratar como seca.
+2. Parto previsto já passou e a vaca não tem medida no último controle: ATENÇÃO (pode estar atrasada e não ter parido). Aparece no topo do Resumo da Reprodução.
+3. Não inventar critérios (ex.: limites de DEL para trocar de lote). Critérios novos vêm dele.
