@@ -191,7 +191,9 @@ details.read .body p{margin:0}
 .chipv.nov{border-style:dashed}
 .chipv.sec{background:var(--neutral-bg)}
 .tb{width:100%}
-.passou{color:var(--warn);font-weight:700}
+.passou{color:var(--fg);font-weight:600}
+#atencao{border-left:3px solid var(--l3)}
+#atencao h2{font-size:1.1rem}
 .touro{display:grid;grid-template-columns:90px 1fr;gap:8px;align-items:center;font-size:.95rem}
 .touro .bar{background:var(--accent)}
 .ficha{display:grid;gap:10px}
@@ -266,7 +268,7 @@ Promise.all([fx('reproducao.json'),fx('dados.json').catch(()=>null)]).then(([R,D
   let h=`<div class="cowtop"><h3>${v}</h3>${g?`<span class="pill ACIMA">GESTANTE</span>`:`<span class="pill">NÃO CONSTA COMO GESTANTE</span>`}</div>`;
   if(D&&!c&&g&&g.cat!=='novilha')h+=`<p class="note" style="margin:0">Não aparece no controle de ${D.cfg.at}: não estava sendo ordenhada.</p>`;
   if(c)h+=`<p class="note" style="margin:0">Controle de ${D.cfg.at}: ${c.l} · ${c.tot.toLocaleString('pt-BR',{minimumFractionDigits:2})} L/dia · DEL ${c.de??'-'}</p>`;
-  if(g)h+=`<div class="facts"><div class="fact"><small>Parto previsto</small><b>${g.parto}</b><i>${dias(g.parto)<0&&D?(byC[v]?`data passou · ordenhada em ${D.cfg.at}`:`<span class="passou">ATENÇÃO: ${-dias(g.parto)} dias de atraso, sem medida em ${D.cfg.at}</span>`):quando(g.parto)}</i></div><div class="fact"><small>Inseminação</small><b>${g.ins}</b><i>${g.doses} dose${g.doses>1?'s':''} · touro ${g.touro}</i></div><div class="fact"><small>Situação</small><b>${st(g)}</b><i>${D&&g.cat!=='novilha'?(byC[v]?`ordenhada em ${D.cfg.at}`:`não ordenhada em ${D.cfg.at}`):''}${g.ult?` · último parto ${g.ult}`:''}</i></div><div class="fact"><small>Partos · IEP</small><b>${g.partos??'-'} parto${g.partos===1?'':'s'}</b><i>${g.iep?'IEP '+g.iep+' dias':'sem IEP'}</i></div></div><p class="note" style="margin:0">Raça: ${g.raca}</p>`;
+  if(g)h+=`<div class="facts"><div class="fact"><small>Parto previsto</small><b>${g.parto}</b><i>${dias(g.parto)<0&&D?(byC[v]?`data passou · ordenhada em ${D.cfg.at}`:`<span class="passou">${-dias(g.parto)} dias de atraso · sem medida em ${D.cfg.at}</span>`):quando(g.parto)}</i></div><div class="fact"><small>Inseminação</small><b>${g.ins}</b><i>${g.doses} dose${g.doses>1?'s':''} · touro ${g.touro}</i></div><div class="fact"><small>Situação</small><b>${st(g)}</b><i>${D&&g.cat!=='novilha'?(byC[v]?`ordenhada em ${D.cfg.at}`:`não ordenhada em ${D.cfg.at}`):''}${g.ult?` · último parto ${g.ult}`:''}</i></div><div class="fact"><small>Partos · IEP</small><b>${g.partos??'-'} parto${g.partos===1?'':'s'}</b><i>${g.iep?'IEP '+g.iep+' dias':'sem IEP'}</i></div></div><p class="note" style="margin:0">Raça: ${g.raca}</p>`;
   if(s)h+=`<div class="box"><small>Secagem</small><b>${s.sec}</b><span>${D&&!byC[v]?`já secou (não ordenhada em ${D.cfg.at})`:quando(s.sec)}</span></div>`;
   if(!g)h+=`<p class="note">Não está na folha de gestantes do Prodap de ${R.data}.</p>`;
   el.innerHTML=h;
