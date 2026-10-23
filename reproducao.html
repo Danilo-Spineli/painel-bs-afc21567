@@ -197,8 +197,8 @@ details.read .body p{margin:0}
 .touro{display:grid;grid-template-columns:90px 1fr;gap:8px;align-items:center;font-size:.95rem}
 .touro .bar{background:var(--accent)}
 .ficha{display:grid;gap:10px}
-.ficha .cowtop{align-items:center}
-.gst{display:grid;justify-items:end;gap:3px;font-size:.88rem;line-height:1.2;color:var(--muted)}
+.ficha .num{font:700 2.6rem/1 var(--display);margin:0}
+.gst{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:-2px;font-size:.95rem;color:var(--muted)}
 .gst b{color:var(--fg);font-weight:700}
 #prev{font-size:.88rem}
 #prev+*{}
@@ -274,7 +274,7 @@ Promise.all([fx('reproducao.json'),fx('dados.json').catch(()=>null)]).then(([R,D
  function ficha(v){
   const g=byG[v], c=byC[v], s=R.secar.find(x=>x.v===v), el=$('ficha');
   if(!g&&!c){el.innerHTML=`<p class="lead">Brinco ${v} não aparece no Prodap de ${R.data} nem no último controle.</p>`;return}
-  let h=`<div class="cowtop"><h3>${v}</h3>${g?`<div class="gst"><span class="pill ACIMA">GESTANTE</span><span>touro <b>${g.touro}</b></span></div>`:`<span class="pill">NÃO CONSTA COMO GESTANTE</span>`}</div>`;
+  let h=`<h3 class="num">${v}</h3><div class="gst">${g?`<span class="pill ACIMA">GESTANTE</span><span>touro <b>${g.touro}</b></span>`:`<span class="pill">NÃO CONSTA COMO GESTANTE</span>`}</div>`;
   if(D&&!c&&g&&g.cat!=='novilha')h+=`<p class="note" style="margin:0">Não aparece no controle de ${D.cfg.at}: não estava sendo ordenhada.</p>`;
   if(c)h+=`<p class="note" style="margin:0">Controle de ${D.cfg.at}: ${c.l} · ${c.tot.toLocaleString('pt-BR',{minimumFractionDigits:2})} L/dia · DEL ${c.de??'-'}</p>`;
   if(g)h+=`<div class="facts"><div class="fact"><small>Parto previsto</small><b>${g.parto}</b><i>${dias(g.parto)<0&&D?(byC[v]?`data passou · ordenhada em ${D.cfg.at}`:`<span class="passou">${-dias(g.parto)} dias de atraso · sem medida em ${D.cfg.at}</span>`):quando(g.parto)}</i></div><div class="fact"><small>Inseminação</small><b>${g.ins}</b><i>${g.doses} dose${g.doses>1?'s':''}</i></div><div class="fact"><small>Situação</small><b>${st(g)}</b><i>${D&&g.cat!=='novilha'?(byC[v]?`ordenhada em ${D.cfg.at}`:`não ordenhada em ${D.cfg.at}`):''}${g.ult?` · último parto ${g.ult}`:''}</i></div><div class="fact"><small>Partos · IEP</small><b>${g.partos??'-'} parto${g.partos===1?'':'s'}</b><i>${g.iep?'IEP '+g.iep+' dias':'sem IEP'}</i></div></div><p class="note" style="margin:0">Raça: ${g.raca}</p>`;
