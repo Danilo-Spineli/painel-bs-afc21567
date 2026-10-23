@@ -1,6 +1,6 @@
 // Guarda o app e os dados no celular para abrir sem internet.
-const CACHE='painel-v1';
-const BASE=['./','index.html','logo.png','manifest.json','icone-192.png','icone.png','apple-icon.png','dados.json','controles/lista.json'];
+const CACHE='painel-v2';
+const BASE=['./','index.html','logo.png','manifest.json','icone-192.png','icone.png','apple-icon.png','dados.json','controles/lista.json','reproducao.html','reproducao.json'];
 const chave=u=>{const x=new URL(u);return x.origin+x.pathname};
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>Promise.all(BASE.map(p=>fetch(p,{cache:'no-store'}).then(r=>r.ok&&c.put(chave(new URL(p,self.registration.scope)),r)).catch(()=>{})))).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});

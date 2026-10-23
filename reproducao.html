@@ -1,0 +1,275 @@
+<!doctype html><html><head><meta charset=utf8><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Boa Sorte"><meta name="theme-color" content="#1e5a3c"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="apple-icon.png"><link rel="icon" href="icone.png"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Reprodução · Boa Sorte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: abas fixas no topo; cada aba é uma coluna única pensada para celular, ampliando para 2 colunas no computador */
+:root{
+  --bg:#f3f6f4; --surface:#ffffff; --fg:#1c2622; --muted:#46544d; --line:#dbe3de;
+  --accent:#1e5a3c; --accent-soft:#e3efe8;
+  --up:#1e5a3c; --up-bg:#e3f0e8; --warn:#b02525; --warn-bg:#fbe7e7; --neutral-bg:#eef2ef;
+  --l1:#2f7556; --l2:#4e82a6; --l3:#c99a3b; --pp:#d98a28; --pr:#747b86; --old:#b9c7bf;
+  --display:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Source Sans 3","Segoe UI",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121815; --surface:#1a221e; --fg:#e4ece7; --muted:#9aa9a1; --line:#2c3832;
+  --accent:#6fc196; --accent-soft:#1f3329; --up:#7fd0a5; --up-bg:#1f3a2c; --warn:#ff8a8a; --warn-bg:#3d2020; --neutral-bg:#212b26; --old:#3e4a44; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121815; --surface:#1a221e; --fg:#e4ece7; --muted:#9aa9a1; --line:#2c3832;
+  --accent:#6fc196; --accent-soft:#1f3329; --up:#7fd0a5; --up-bg:#1f3a2c; --warn:#ff8a8a; --warn-bg:#3d2020; --neutral-bg:#212b26; --old:#3e4a44; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+img{max-width:100%}
+body{background:var(--bg);color:var(--fg);font:17.5px/1.5 var(--body);margin:0}
+.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:0 96px}
+header.top{background:var(--bg)}
+.brand{display:flex;justify-content:space-between;align-items:baseline;gap:4px 12px;padding-block:12px 4px;flex-wrap:wrap}
+.brand h1{font:700 1.3rem/1.1 var(--display);margin:0;color:var(--accent)}
+.brand span{color:var(--muted);font-size:.85rem}
+.brand-logo{flex-wrap:nowrap;align-items:center;justify-content:flex-start;gap:10px}
+.brandtxt{display:grid;gap:4px;min-width:0}
+.brand-logo h1{white-space:nowrap;font-size:min(1.3rem,calc((100vw - 132px)/17.4))}
+.menubtn{margin-left:auto;flex:none;width:44px;height:44px;display:grid;place-items:center;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font-size:1.35rem;line-height:1;cursor:pointer}
+.menubtn:focus-visible,.ctl:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.sheet{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.45);display:flex;justify-content:flex-end}
+.sheet .in{background:var(--bg);width:min(340px,88vw);height:100%;padding:calc(env(safe-area-inset-top,0px) + 16px) 16px calc(env(safe-area-inset-bottom,0px) + 16px);display:grid;align-content:start;gap:10px;overflow-y:auto;box-shadow:-8px 0 24px rgba(0,0,0,.25)}
+.sheet .hd{display:flex;justify-content:space-between;align-items:center}
+.sheet h2{margin:0}
+.ctl{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;text-align:left;width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit;cursor:pointer}
+.ctl b{font:700 1.25rem var(--display)}
+.ctl small{color:var(--muted);font-size:.88rem;grid-column:1}
+.ctl .tagc{grid-row:1/3;grid-column:2;font:700 .78rem var(--body);padding:4px 9px;border-radius:999px;background:var(--neutral-bg);color:var(--muted)}
+.ctl[aria-current="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.ctl[aria-current="true"] .tagc{background:var(--accent);color:var(--surface)}
+.antigo{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px;padding:10px 12px;border-radius:10px;background:var(--warn-bg);color:var(--fg);font-size:.95rem}
+.antigo button{font:700 .95rem var(--body);padding:8px 12px;border-radius:8px;border:0;background:var(--accent);color:var(--surface);cursor:pointer}
+.trevo{height:38px;width:auto;flex:none}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:10;display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabbar button{font:700 .78rem var(--body);background:none;border:0;color:var(--muted);padding:8px 2px 10px;min-height:58px;display:grid;justify-items:center;gap:2px;cursor:pointer}
+.tabbar .ico{font-size:1.4rem;line-height:1}
+.tabbar button[aria-selected="true"]{color:var(--accent);box-shadow:inset 0 3px 0 var(--accent)}
+.tabbar button:focus-visible,.chip:focus-visible,input:focus-visible,.row:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
+@media(min-width:900px){.tabbar{position:sticky;top:env(safe-area-inset-top,0px);bottom:auto;max-width:980px;margin:0 auto;border:1px solid var(--line);border-radius:12px}}
+section{padding-top:16px;display:grid;gap:16px}
+h2{font:700 1.35rem var(--display);margin:0 0 4px;letter-spacing:.01em}
+.note{color:var(--muted);font-size:.95rem;margin:0}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media(min-width:700px){.kpis{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px}
+.kpi b{display:block;font:700 1.7rem var(--display);font-variant-numeric:tabular-nums}
+.kpi small{color:var(--muted);font-size:.85rem;text-transform:uppercase;letter-spacing:.04em}
+.kpi i{font-style:normal;font-size:.85rem;color:var(--muted)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0}
+.bars{display:grid;gap:10px}
+.bar-row{display:grid;grid-template-columns:96px 1fr;gap:8px;align-items:center;font-size:1rem}
+.bar-track{display:grid;gap:3px}
+.bar{height:16px;border-radius:3px;position:relative}
+.bar span{position:absolute;left:calc(100% + 6px);top:50%;transform:translateY(-50%);font-size:.9rem;white-space:nowrap;font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:14px;font-size:.8rem;color:var(--muted);flex-wrap:wrap}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.chip{font:600 .95rem var(--body);padding:10px 14px;white-space:nowrap;flex:none;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.lothead{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.92rem}
+.lothead b{font-variant-numeric:tabular-nums}
+.faixa{font-weight:700;color:var(--accent)}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+.tbl{overflow-x:auto}
+th{font:600 .78rem var(--body);text-transform:uppercase;letter-spacing:.04em;color:var(--muted);text-align:right;padding:6px 6px;border-bottom:1px solid var(--line)}
+td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:right;font-size:.95rem}
+th:first-child,td:first-child{text-align:left}
+td.brinco{font-weight:700}
+tr.click{cursor:pointer}
+tr.click:hover td{background:var(--neutral-bg)}
+.pill{display:inline-block;font:700 .82rem var(--body);letter-spacing:.03em;padding:4px 10px;border-radius:999px;background:var(--neutral-bg);color:var(--muted)}
+.pill.ACIMA{background:var(--up-bg);color:var(--up)}
+.pill.ATENÇÃO{background:var(--warn-bg);color:var(--warn)}
+.delta.neg{color:var(--warn)}.delta.pos{color:var(--up)}
+.search{display:flex;gap:8px}
+.search input{flex:1;min-width:0;font:600 1.1rem var(--body);padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg)}
+.cow{display:grid;gap:12px}
+.cowtop{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.cowtop h3{font:700 2.6rem/1 var(--display);margin:0}
+.cowtop{flex-wrap:nowrap;align-items:baseline}
+.daytot{display:flex;align-items:baseline;gap:4px;white-space:nowrap}
+.daytot b{font:700 2.1rem/1 var(--display);font-variant-numeric:tabular-nums;color:var(--accent)}
+.daytot span{color:var(--muted);font-size:.9rem;font-weight:600}
+.repro{margin:-4px 0 0}
+.ts{width:100%;height:auto;display:block}
+.ts text{fill:var(--muted);font-family:var(--body)}
+.ts .band{fill:var(--accent);opacity:.18}
+.ts .ln{stroke:var(--accent);stroke-width:3;fill:none}
+.ts .pt{fill:var(--accent);stroke:var(--surface);stroke-width:2}
+.ts .val{fill:var(--fg);font-weight:700}
+.cowsub{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-top:-6px}
+.cow .facts .fact{padding:6px 10px}
+.cow .facts .fact b{font-size:1rem;font-weight:600}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media(min-width:700px){.facts{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.fact{background:var(--neutral-bg);border-radius:8px;padding:8px 10px}
+.fact small{display:block;color:var(--muted);font-size:.85rem;text-transform:uppercase;letter-spacing:.04em}
+.fact b{font-variant-numeric:tabular-nums;font-size:1.15rem}
+.hist{border-left:3px solid var(--accent);padding:6px 10px;background:var(--accent-soft);border-radius:0 8px 8px 0;font-size:.92rem}
+.grid2{display:grid;gap:16px}
+@media(min-width:820px){.grid2{grid-template-columns:1fr 1fr}}
+ul.plain{margin:0;padding-left:18px}ul.plain li{margin:3px 0}
+.bigin{font:600 1.25rem var(--body);padding:12px 14px;border-radius:10px;border:2px solid var(--line);background:var(--surface);color:var(--fg);width:100%}
+.bigin:focus{border-color:var(--accent);outline:none}
+.res{display:flex;flex-wrap:wrap;gap:6px}
+.res button,.tag{font:700 1rem var(--body);font-variant-numeric:tabular-nums;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.res button small{display:block;font-weight:400;font-size:.75rem;color:var(--muted)}
+.tag{padding:9px 0;font-size:1rem;min-width:56px;text-align:center}
+.tag.on{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+.tag:focus-visible,.res button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.tags{display:grid;grid-template-columns:repeat(auto-fill,minmax(58px,1fr));gap:6px}
+.lead{font-size:1.12rem;margin:0}
+.sc{width:100%;height:auto;display:block;touch-action:manipulation}
+.sc text{fill:var(--muted);font-family:var(--body)}
+.sc .ax{stroke:var(--line)}
+.sc .dot{stroke:var(--surface);stroke-width:1.5;cursor:pointer}
+.sc .dim{opacity:.28}
+.sc .hit{fill:transparent;cursor:pointer}
+.sc .me{stroke:var(--fg);stroke-width:3}
+.sc .ring{fill:none;stroke:var(--warn);stroke-width:3}
+@media (prefers-reduced-motion:no-preference){.sc .ring{animation:pulse 1.6s ease-in-out infinite}}
+@keyframes pulse{0%,100%{stroke-opacity:1;stroke-width:3}50%{stroke-opacity:.35;stroke-width:7}}
+.sc .lbl{fill:var(--fg);font-weight:700}
+details.read{border:2px solid var(--accent);border-radius:12px;overflow:hidden}
+details.read summary{list-style:none;cursor:pointer;padding:14px 16px;font-weight:700;font-size:1.08rem;color:var(--accent);display:flex;justify-content:space-between;align-items:center}
+details.read summary::-webkit-details-marker{display:none}
+details.read summary::after{content:"+";font-size:1.5rem;line-height:1}
+details.read[open] summary::after{content:"–"}
+details.read .body{padding:0 16px 14px;display:grid;gap:8px}
+details.read .body p{margin:0}
+.list{display:grid}
+.row{display:grid;grid-template-columns:2.6em 1fr auto auto;gap:12px;align-items:center;padding:13px 4px;font-size:1.05rem;border-bottom:1px solid var(--line);background:none;border-left:0;border-right:0;border-top:0;color:var(--fg);font:inherit;text-align:left;cursor:pointer;width:100%}
+.row:last-child{border-bottom:0}
+.row .rk{font:700 1rem var(--display);color:var(--muted);font-variant-numeric:tabular-nums}
+.row .id{font:700 1.4rem var(--display);font-variant-numeric:tabular-nums}
+.row .sub{display:block;font:400 .9rem var(--body);color:var(--muted)}
+.row .val{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.row .val .sub{font-weight:400}
+.card{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:4px;background:none;color:var(--fg);font:inherit;text-align:left;cursor:pointer;width:100%}
+.card .top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.card .top b{font:700 1.15rem var(--display)}
+.stack{display:grid;gap:8px}
+.vlink{font:700 1rem var(--body);font-variant-numeric:tabular-nums;color:var(--accent);background:var(--accent-soft);border:1px solid transparent;border-radius:6px;padding:3px 8px;margin:2px 1px;cursor:pointer;display:inline-block}
+.vlink:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+.prio{border-left:4px solid var(--accent);padding:8px 12px;display:grid;gap:6px}
+.prio h3{margin:0;font:700 1.15rem var(--display)}
+.prio p{margin:0}
+.kv{display:grid;gap:8px}
+.kv>div{display:grid;gap:4px}
+.kv b.l{font-size:.95rem}
+@media (prefers-reduced-motion:no-preference){.bar{transition:width .4s ease}}
+
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.panel.search{padding:10px}
+.panel.search .bigin{padding:9px 12px;font-size:1.1rem}
+.cow{display:grid;gap:12px}
+.cowhead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:-4px}
+.cow .facts.turnos{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.turnos .fact{padding:6px 8px;text-align:center}
+.turnos .fact b{font-size:1.05rem}
+.box{border-radius:10px;padding:10px 12px;background:var(--accent-soft);border-left:4px solid var(--accent)}
+.box small{display:block;color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;font-weight:700}
+.box b{display:block;font:700 1.25rem var(--display);color:var(--accent);margin:2px 0}
+.box span{font-size:.9rem;color:var(--muted)}
+.cow .facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+.fact b+b{display:block}
+.fact i{display:block;font-style:normal;font-size:.82rem;color:var(--muted);margin-top:2px}
+.fact.wide{grid-column:1/-1}
+</style>
+
+<style>
+.mes{display:grid;gap:8px}
+.mes h3{margin:0;font:700 1.1rem var(--display);display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.mes h3 span{font:600 .9rem var(--body);color:var(--muted)}
+.chipv{display:inline-grid;gap:1px;text-align:left;font:700 1.05rem var(--display);padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer;margin:0 6px 6px 0}
+.chipv small{font:400 .78rem var(--body);color:var(--muted)}
+.chipv.nov{border-style:dashed}
+.chipv.sec{background:var(--neutral-bg)}
+.tb{width:100%}
+.passou{color:var(--warn);font-weight:700}
+.touro{display:grid;grid-template-columns:90px 1fr;gap:8px;align-items:center;font-size:.95rem}
+.touro .bar{background:var(--accent)}
+.ficha{display:grid;gap:10px}
+</style>
+<header class="top"><div class="wrap brand brand-logo"><img class="trevo" src="logo.png" alt="Trevo da Fazenda Boa Sorte"><div class="brandtxt"><h1>Fazenda Boa Sorte · Reprodução</h1><span id="subt"></span></div><button class="menubtn" id="menubtn" aria-label="Menu" aria-haspopup="dialog">☰</button></div></header>
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-label="Menu"><div class="in"><div class="hd"><h2>Menu</h2><button class="menubtn" id="fecha" aria-label="Fechar">✕</button></div><div id="menu" style="display:grid;gap:8px"></div></div></div>
+<nav class="tabbar" role="tablist">
+ <button role="tab" data-tab="resumo" aria-selected="true"><span class="ico">▤</span>Resumo</button>
+ <button role="tab" data-tab="partos" aria-selected="false"><span class="ico">◷</span>Partos</button>
+ <button role="tab" data-tab="secagens" aria-selected="false"><span class="ico">◐</span>Secagens</button>
+ <button role="tab" data-tab="vaca" aria-selected="false"><span class="ico">⌕</span>Vaca</button>
+ <button role="tab" data-tab="vazias" aria-selected="false"><span class="ico">○</span>Não gest.</button>
+</nav>
+<main class="wrap">
+<section id="resumo">
+ <div class="kpis" id="kpis"></div>
+ <div class="panel"><h2>Previsão por mês</h2><p class="note">Partos previstos, secagens previstas e quantas vacas devem estar em lactação, segundo o Prodap.</p><div class="tbl" style="margin-top:8px"><table id="prev"></table></div></div>
+ <div class="panel"><h2>Gestantes por touro</h2><div class="bars" id="touros" style="margin-top:8px"></div></div>
+</section>
+<section id="partos" hidden><p class="note">Do parto mais próximo para o mais distante. Tracejado = novilha. Fundo cinza = vaca seca. Toque no brinco para ver a ficha.</p><div id="lpartos" style="display:grid;gap:12px"></div></section>
+<section id="secagens" hidden><p class="note">Folha "Matrizes a secar" do Prodap.</p><div class="panel"><div class="tbl"><table id="tsec"></table></div></div></section>
+<section id="vaca" hidden>
+ <div class="panel search"><label for="q" class="sr">Buscar pelo brinco</label><input id="q" class="bigin" inputmode="numeric" autocomplete="off" placeholder="🔍 Buscar pelo brinco"><div id="res" class="res" style="margin-top:8px"></div></div>
+ <div class="panel ficha" id="ficha"></div>
+</section>
+<section id="vazias" hidden><p class="note" id="vznote"></p><div class="panel kv" id="lvaz"></div></section>
+</main>
+<script>
+try{if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js')}catch(e){}
+const $=id=>document.getElementById(id);
+const fx=u=>fetch(u+'?v='+Date.now(),{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json()});
+const toD=s=>{const[d,m,y]=s.split('/').map(Number);return new Date(y<100?2000+y:y,m-1,d)};
+const hoje=new Date();hoje.setHours(0,0,0,0);
+const dias=s=>Math.round((toD(s)-hoje)/864e5);
+const quando=s=>{const k=dias(s);return k<0?`<span class="passou">data prevista já passou</span>`:k===0?'hoje':`em ${k} dias`};
+const MES=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const tabs=[...document.querySelectorAll('.tabbar button')];
+function show(t){tabs.forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===t));['resumo','partos','secagens','vaca','vazias'].forEach(id=>$(id).hidden=id!==t);try{localStorage.setItem('rtab',t)}catch(e){}}
+tabs.forEach(b=>b.onclick=()=>{show(b.dataset.tab);scrollTo({top:0})});
+$('menubtn').onclick=()=>$('sheet').hidden=false;$('fecha').onclick=()=>$('sheet').hidden=true;
+$('sheet').onclick=e=>{if(e.target.id==='sheet')$('sheet').hidden=true};
+const isoBR=id=>id.split('-').reverse().join('/');
+fx('controles/lista.json').catch(()=>[]).then(L=>{
+ $('menu').innerHTML=`<div style="font-weight:700;margin-top:4px">Reprodução</div><button class="ctl" aria-current="true" onclick="document.getElementById('sheet').hidden=true"><b>Prodap mais recente</b><small>gestantes, partos e secagens</small><span class="tagc">ABERTO</span></button><div style="font-weight:700;margin-top:10px">Controles</div>`+
+ (L||[]).map((c,i)=>`<a class="ctl" style="text-decoration:none" href="./${i?'?c='+c.id:''}"><b>${isoBR(c.id)}</b><small>${c.n} vacas · ${c.tot.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})} L no dia</small><span class="tagc">${i?'ABRIR':'ATUAL'}</span></a>`).join('');
+});
+Promise.all([fx('reproducao.json'),fx('dados.json').catch(()=>null)]).then(([R,D])=>{
+ const G=R.gestantes, byG=Object.fromEntries(G.map(g=>[g.v,g])), byC=D?Object.fromEntries(D.vac.map(c=>[c.v,c])):{};
+ $('subt').textContent=`Prodap de ${R.data}`+(D?` · controle de ${D.cfg.at}`:'');
+ const r=R.resumo;
+ $('kpis').innerHTML=[[r.total,'Gestantes',`${r.lactacao} em lactação · ${r.secas} secas · ${r.novilhas} novilhas`],[r.is_geral.toLocaleString('pt-BR'),'Índice de serviço',`matrizes ${r.is_matrizes.toLocaleString('pt-BR')} · novilhas ${r.is_novilhas.toLocaleString('pt-BR')}`],[r.iep_medio+' d','IEP médio','intervalo entre partos'],[r.partos_medio.toLocaleString('pt-BR'),'Partos por vaca','média, sem novilhas']].map(([b,s,i])=>`<div class="kpi"><small>${s}</small><b>${b}</b><i>${i}</i></div>`).join('');
+ $('prev').innerHTML='<tr><th>Mês</th><th>Novilhas</th><th>Vacas</th><th>Partos</th><th>Secagens</th><th>Em lactação</th></tr>'+R.previsao.map(p=>`<tr><td>${p[0]}</td><td>${p[1]}</td><td>${p[2]}</td><td><b>${p[3]}</b></td><td>${p[4]}</td><td>${p[5]}</td></tr>`).join('');
+ const tm=Math.max(...Object.values(R.touros));
+ $('touros').innerHTML=Object.entries(R.touros).sort((a,b)=>b[1]-a[1]).map(([t,n])=>`<div class="touro"><span>${t}</span><div style="padding-right:40px"><div class="bar" style="width:${n/tm*100}%"><span>${n}</span></div></div></div>`).join('');
+ const chip=g=>`<button class="chipv${g.cat==='novilha'?' nov':g.cat==='seca'?' sec':''}" data-v="${g.v}">${g.v}<small>${g.parto.slice(0,5)} · ${g.cat}</small></button>`;
+ const gp={};[...G].sort((a,b)=>toD(a.parto)-toD(b.parto)).forEach(g=>{const d=toD(g.parto),k=d.getFullYear()*12+d.getMonth();(gp[k]=gp[k]||{d,a:[]}).a.push(g)});
+ $('lpartos').innerHTML=Object.values(gp).map(({d,a})=>`<div class="panel mes"><h3>${MES[d.getMonth()]}/${d.getFullYear()}<span>${a.length} parto${a.length>1?'s':''} · ${a.filter(g=>g.cat==='novilha').length} novilha(s)</span></h3><div>${a.map(chip).join('')}</div></div>`).join('');
+ $('tsec').innerHTML='<tr><th>Brinco</th><th>Secagem</th><th>Quando</th><th>Parto previsto</th></tr>'+[...R.secar].sort((a,b)=>toD(a.sec)-toD(b.sec)).map(s=>`<tr class="click" data-v="${s.v}"><td class="brinco">${s.v}</td><td>${s.sec}</td><td>${quando(s.sec)}</td><td>${s.parto}</td></tr>`).join('');
+ const vz=D?D.vac.filter(c=>!byG[c.v]):[];
+ $('vznote').textContent=D?`${vz.length} vacas medidas no controle de ${D.cfg.at} não constam como gestantes no Prodap de ${R.data}. Isso não confirma que estejam vazias: pode ser só diferença de data entre as duas fontes.`:'Sem controle carregado para cruzar.';
+ $('lvaz').innerHTML=(D?D.L:[]).map(l=>{const a=vz.filter(c=>c.l===l).sort((x,y)=>(y.de||0)-(x.de||0));return a.length?`<div><b class="l">${l} · ${a.length}</b><div>${a.map(c=>`<button class="chipv" data-v="${c.v}">${c.v}<small>DEL ${c.de??'-'}</small></button>`).join('')}</div></div>`:''}).join('');
+ function ficha(v){
+  const g=byG[v], c=byC[v], s=R.secar.find(x=>x.v===v), el=$('ficha');
+  if(!g&&!c){el.innerHTML=`<p class="lead">Brinco ${v} não aparece no Prodap de ${R.data} nem no último controle.</p>`;return}
+  let h=`<div class="cowtop"><h3>${v}</h3>${g?`<span class="pill ACIMA">GESTANTE</span>`:`<span class="pill">NÃO CONSTA COMO GESTANTE</span>`}</div>`;
+  if(c)h+=`<p class="note" style="margin:0">Controle de ${D.cfg.at}: ${c.l} · ${c.tot.toLocaleString('pt-BR',{minimumFractionDigits:2})} L/dia · DEL ${c.de??'-'}</p>`;
+  if(g)h+=`<div class="facts"><div class="fact"><small>Parto previsto</small><b>${g.parto}</b><i>${quando(g.parto)}</i></div><div class="fact"><small>Inseminação</small><b>${g.ins}</b><i>${g.doses} dose${g.doses>1?'s':''} · touro ${g.touro}</i></div><div class="fact"><small>Categoria</small><b>${g.cat}</b>${g.ult?`<i>último parto ${g.ult}</i>`:''}</div><div class="fact"><small>Partos · IEP</small><b>${g.partos??'-'} parto${g.partos===1?'':'s'}</b><i>${g.iep?'IEP '+g.iep+' dias':'sem IEP'}</i></div></div><p class="note" style="margin:0">Raça: ${g.raca}</p>`;
+  if(s)h+=`<div class="box"><small>Secagem</small><b>${s.sec}</b><span>${quando(s.sec)}</span></div>`;
+  if(!g)h+=`<p class="note">Não está na folha de gestantes do Prodap de ${R.data}.</p>`;
+  el.innerHTML=h;
+ }
+ const ALL=[...new Set([...G.map(g=>g.v),...Object.keys(byC)])];
+ function pick(v){$('q').value=v;$('res').innerHTML='';ficha(v)}
+ $('q').addEventListener('input',()=>{const t=$('q').value.replace(/\D/g,'');if(!t){$('res').innerHTML='';return}if(ALL.includes(t)){pick(t);return}
+  const h=ALL.filter(v=>v.includes(t)).slice(0,12);$('res').innerHTML=h.length?h.map(v=>`<button data-v="${v}">${v}<small>${byG[v]?'gestante':'não gestante'}</small></button>`).join(''):`<span class="note">Nenhum brinco com "${t}".</span>`;
+  $('res').querySelectorAll('button').forEach(b=>b.onclick=()=>pick(b.dataset.v))});
+ document.addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(b&&!b.closest('#res')){pick(b.dataset.v);show('vaca');scrollTo({top:0})}});
+ pick(G[0].v);
+ try{const t=localStorage.getItem('rtab');if(t)show(t)}catch(e){}
+}).catch(()=>{document.querySelector('main').insertAdjacentHTML('afterbegin','<div class="panel" style="margin-top:16px">Não consegui carregar a reprodução. Verifique a internet e abra de novo.</div>')});
+</script>
