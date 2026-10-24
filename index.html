@@ -464,7 +464,7 @@ document.querySelectorAll('.dRepro').forEach(e=>e.textContent=C.repro);
  const known=v=>byV[v]||D.saidas.find(x=>x.v===v);
  const a=D.proximos_partos.filter(p=>{const k=dd(p[1]);return k>=0&&k<=60}).sort((x,y)=>dd(x[1])-dd(y[1]));
  const gp={};a.forEach(p=>{(gp[p[1]]=gp[p[1]]||[]).push(p)});
- document.getElementById('partos').innerHTML=a.length?Object.entries(gp).map(([d,l])=>`<div><b class="l">${d} · em ${dd(d)} dias</b><div>${l.map(p=>(known(p[0])?V(p[0]):`<b>${p[0]}</b>`)+`<span class="note"> ${p[2]}</span>`).join(' ')}</div></div>`).join(''):'<p class="note">Nenhum parto previsto nos próximos 60 dias.</p>'})();
+ document.getElementById('partos').innerHTML=a.length?Object.entries(gp).map(([d,l])=>`<div><b class="l">${d} · em ${dd(d)} dias</b><div>${l.map(p=>(known(p[0])?V(p[0]):`<b>${p[0]}</b>`)+`<span class="note"> ${p[2]==='em lactação'&&!byV[p[0]]?'seca':p[2]}</span>`).join(' ')}</div></div>`).join(''):'<p class="note">Nenhum parto previsto nos próximos 60 dias.</p>'})();
 scatter(document.getElementById('scAll'));
 if(PRI){
  const lg=document.querySelector('.dAnt');if(lg)lg.parentElement.hidden=true;
