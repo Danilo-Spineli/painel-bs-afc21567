@@ -66,7 +66,7 @@ h2{margin:4px 0 0;font-size:1rem;color:var(--muted);text-transform:uppercase;let
 </head>
 <body>
 <header>
-  <div class="top"><h1><a href="index.html" style="color:inherit;text-decoration:none" aria-label="Voltar ao painel">‹</a> <span id="dot" style="font-size:.8em">●</span> Lactotropin</h1>
+  <div class="top"><h1><a href="index.html" style="color:inherit;text-decoration:none" aria-label="Voltar ao painel">‹</a> <span id="dot" style="font-size:.8em">●</span> Lactotropin <small id="modo" hidden style="font-size:.6em;color:var(--muted);font-weight:700">· só acompanhando</small></h1>
     <span style="display:flex;gap:6px;align-items:center"><select id="data"></select><button id="mais" aria-label="Mais opções" style="font:800 1.1rem inherit;font-family:inherit;background:var(--surface);border:1px solid var(--line);border-radius:8px;color:var(--fg);padding:4px 10px;cursor:pointer">⋯</button></span></div>
   <div id="info" class="panel" hidden style="margin-top:8px;display:grid;gap:6px;font-size:.9rem">
     <div class="sub" id="fonte"></div><div id="sync" style="font-weight:700">conectando…</div>
@@ -81,7 +81,8 @@ h2{margin:4px 0 0;font-size:1rem;color:var(--muted);text-transform:uppercase;let
   <input id="lnome" placeholder="Seu nome (aparece nas marcações)" style="font:600 1.1rem inherit;font-family:inherit;padding:10px;border-radius:10px;border:1px solid var(--line)">
   <input id="lcod" placeholder="Código da fazenda" style="font:600 1.1rem inherit;font-family:inherit;padding:10px;border-radius:10px;border:1px solid var(--line)">
   <button id="lok" style="font:800 1rem inherit;font-family:inherit;padding:12px;border-radius:10px;border:0;background:#1e5a3c;color:#fff">Entrar para marcar</button>
-  <button id="lver" class="ib" style="padding:12px">Só acompanhar (não marca nada)</button>
+  <button id="lver" class="ib" style="padding:12px">Só acompanhar (não marca nada · só precisa do código)</button>
+  <p id="lmsg" style="margin:0;color:var(--nao);font-weight:700"></p>
 </div>
 <main>
   <div class="panel"><div class="count"><span id="ctxt"></span><b id="cnum"></b></div><div class="bar"><i id="cbar"></i></div></div>
@@ -112,7 +113,7 @@ const KEY=()=>'lacto_'+D.datas[di];
 const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
 let NOME=ls('lacto_nome')||'', COD=ls('lacto_cod')||'', VER=ls('lacto_modo')==='ver';
 function pedirAcesso(){
-  $('zerar').hidden=VER;
+  $('zerar').hidden=VER;$('modo').hidden=!VER;
   if(NOME&&COD){$('login').hidden=true;return true}
   $('login').hidden=false;$('lnome').value=NOME;$('lcod').value=COD;return false}
 try{fila=JSON.parse(ls('lacto_fila')||'[]')}catch(e){fila=[]}
@@ -141,7 +142,7 @@ async function puxar(){
     const hh=new Date().toLocaleTimeString('pt-BR');status(fila.length?`⟳ ${fila.length} marcação(ões) enviando…`:`● sincronizado · ${NOME}${VER?' (só acompanha)':''} · atualizado ${hh} · ${servidor.length} registros`,!fila.length);
   }catch(e){status(`⚠ sem sinal · ${fila.length} marcação(ões) guardada(s) no celular`,false)}
 }
-function acao(v,tipo){fila.push({data:D.datas[di],v,acao:tipo,quem:NOME,t:Date.now()});salvaFila();aplicar();render();status(`⟳ ${fila.length} marcação(ões) enviando…`,false);enviar()}
+function acao(v,tipo){if(VER)return;fila.push({data:D.datas[di],v,acao:tipo,quem:NOME,t:Date.now()});salvaFila();aplicar();render();status(`⟳ ${fila.length} marcação(ões) enviando…`,false);enviar()}
 $('data').innerHTML=D.datas.map((d,i)=>`<option value="${i}">${d.slice(0,5)}</option>`).join('');
 $('data').value=di;
 $('fonte').textContent=`Cronograma Prodap ${D.cronograma.slice(0,5)} · lotes do controle ${D.controle}`;
@@ -213,7 +214,9 @@ $('zerar').addEventListener('click',()=>{
   acao('*','zerou');aviso('zerar','Marcações zeradas',false)});
 $('mais').addEventListener('click',()=>{$('info').hidden=!$('info').hidden});
 $('sair').addEventListener('click',()=>{if(!confirm('Sair deste celular? As marcações já enviadas continuam na planilha.'))return;NOME='';COD='';ls('lacto_nome','');ls('lacto_cod','');status('desconectado',false);pedirAcesso()});
-const entrar=ver=>{NOME=$('lnome').value.trim();COD=$('lcod').value.trim();if(!NOME||!COD)return;VER=ver;ls('lacto_modo',ver?'ver':'marcar');ls('lacto_nome',NOME);ls('lacto_cod',COD);pedirAcesso();enviar();puxar()};
+const entrar=ver=>{NOME=$('lnome').value.trim();COD=$('lcod').value.trim();if(ver&&!NOME)NOME='Espectador';
+  if(!COD){$('lmsg').textContent='Digite o código da fazenda.';return} if(!NOME){$('lmsg').textContent='Digite seu nome para marcar (ou toque em Só acompanhar).';return}
+  $('lmsg').textContent='';VER=ver;ls('lacto_modo',ver?'ver':'marcar');ls('lacto_nome',NOME);ls('lacto_cod',COD);pedirAcesso();enviar();puxar()};
 $('lok').addEventListener('click',()=>entrar(false));
 $('lver').addEventListener('click',()=>entrar(true));
 pedirAcesso(); aplicar(); render(); enviar(); puxar(); setInterval(()=>{if(!document.hidden){enviar();puxar()}},15000);
