@@ -160,7 +160,15 @@ async function puxar(){
   }catch(e){status(`⚠ sem sinal · ${fila.length} marcação(ões) guardada(s) no celular`,false)}
 }
 const podeMarcar=()=>!!(NOME&&COD&&!VER);
-function acao(v,tipo){if(!podeMarcar())return;fila.push({data:D.datas[di],v,acao:tipo,quem:NOME,t:Date.now()});salvaFila();aplicar();render();status(`⟳ ${fila.length} marcação(ões) enviando…`,false);enviar()}
+// fora de época: hoje fora de 3 dias antes / 3 dias depois da data selecionada -> confirma na 1ª vaca
+function foraDeEpoca(){const [d,m,y]=D.datas[di].split('/');const ap=new Date(+y,m-1,+d);const h=new Date();h.setHours(0,0,0,0);const dif=Math.round((h-ap)/86400000);return dif<-3||dif>3}
+function confirmaEpoca(){
+  if(!foraDeEpoca())return true;
+  const k='lacto_ok_'+D.datas[di];if(ls(k)==='1')return true;
+  const hoje=new Date().toLocaleDateString('pt-BR');
+  const ok=confirm(`Hoje é ${hoje} e a aplicação selecionada é ${D.datas[di]}, fora do período normal (3 dias antes a 3 dias depois).\n\nTem certeza de que quer marcar vacas nesta data?`);
+  if(ok)ls(k,'1');return ok}
+function acao(v,tipo){if(!podeMarcar())return false;if(tipo!=='desfez'&&!confirmaEpoca())return false;fila.push({data:D.datas[di],v,acao:tipo,quem:NOME,t:Date.now()});salvaFila();aplicar();render();status(`⟳ ${fila.length} marcação(ões) enviando…`,false);enviar()}
 $('data').innerHTML=D.datas.map((d,i)=>`<option value="${i}">${d.slice(0,5)}</option>`).join('');
 $('data').value=di;
 $('fonte').textContent=`Cronograma Prodap ${D.cronograma.slice(0,5)} · lotes do controle ${D.controle}`;
@@ -218,7 +226,7 @@ document.addEventListener('click',e=>{
   if(c&&!podeMarcar()){aviso('ver',VER?'Modo só acompanhar: não marca vacas':'Entre com nome e código para marcar',false);if(!VER)pedirAcesso();return}
   if(c){const v=c.dataset.v;
     const fromSearch=!!c.closest('#res');
-    if(marc[v]){acao(v,'desfez');aviso(v,`${v} desmarcada`,false)} else {acao(v,'passou');trava=Date.now()+700;aviso(v,`${v} passou`,true)}
+    if(marc[v]){acao(v,'desfez');aviso(v,`${v} desmarcada`,false)} else {if(acao(v,'passou')===false)return;trava=Date.now()+700;aviso(v,`${v} passou`,true)}
     if(fromSearch){$('q').value='';busca();$('q').focus()}
     return}
   const t=e.target.closest('.tab'); if(t){aba=t.dataset.t;render();window.scrollTo(0,0)}
@@ -230,7 +238,7 @@ $('zerar').addEventListener('click',()=>{
   if(!podeMarcar())return;
   const c=(window.prompt?prompt(`Isto zera as marcações de ${D.datas[di]} em TODOS os celulares.\nDigite o código da fazenda para confirmar:`):null);
   if(c===null)return; if(c.trim()!==COD){aviso('zerar','Código errado: nada foi zerado',false);return}
-  acao('*','zerou');aviso('zerar','Marcações zeradas',false)});
+  if(acao('*','zerou')===false)return;aviso('zerar','Marcações zeradas',false)});
 $('menubtn').addEventListener('click',()=>{$('sheet').hidden=false});$('fecha').addEventListener('click',()=>{$('sheet').hidden=true});$('sheet').addEventListener('click',e=>{if(e.target.id==='sheet')$('sheet').hidden=true});
 $('mais').addEventListener('click',()=>{$('info').hidden=!$('info').hidden});
 $('sair').addEventListener('click',()=>{if(!confirm('Sair deste celular? As marcações já enviadas continuam na planilha.'))return;NOME='';COD='';ls('lacto_nome','');ls('lacto_cod','');status('desconectado',false);pedirAcesso()});
