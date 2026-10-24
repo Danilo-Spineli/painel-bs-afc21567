@@ -1,6 +1,12 @@
 <!doctype html>
 <html lang="pt-BR">
-<head><meta charset=utf8><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Boa Sorte"><meta name="theme-color" content="#1e5a3c"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="apple-icon.png"><link rel="icon" href="icone.png"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><script>try{var t=localStorage.getItem("tema");if(t&&t!=="sistema")document.documentElement.dataset.theme=t}catch(e){}</script><script src="tema.js"></script>
+<head><meta charset=utf8><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Boa Sorte"><meta name="theme-color" content="#1e5a3c"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="apple-icon.png"><link rel="icon" href="icone.png"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}.menubtn{margin-left:auto;flex:none;width:44px;height:44px;display:grid;place-items:center;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font-size:1.35rem;line-height:1;cursor:pointer}.menubtn:focus-visible,.ctl:focus-visible{outline:3px solid var(--accent);outline-offset:2px}.sheet{position:fixed;inset:0;z-index:30;background:rgba(0,0,0,.45);display:flex;justify-content:flex-end}.sheet .in{background:var(--bg);width:min(340px,88vw);height:100%;padding:calc(env(safe-area-inset-top,0px) + 16px) 16px calc(env(safe-area-inset-bottom,0px) + 16px);display:grid;align-content:start;gap:10px;overflow-y:auto;box-shadow:-8px 0 24px rgba(0,0,0,.25)}.sheet .hd{display:flex;justify-content:space-between;align-items:center}.sheet h2{margin:0}.ctl{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;text-align:left;width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:inherit;cursor:pointer}.ctl b{font:700 1.25rem var(--display)}.ctl small{color:var(--muted);font-size:.88rem;grid-column:1}.ctl .tagc{grid-row:1/3;grid-column:2;font:700 .78rem var(--body);padding:4px 9px;border-radius:999px;background:var(--neutral-bg);color:var(--muted)}.ctl[aria-current="true"]{border-color:var(--accent);background:var(--accent-soft)}.ctl[aria-current="true"] .tagc{background:var(--accent);color:var(--surface)}.ctl').forEach(b=>b.onclick=()=>{if(b.dataset.id===cur){fecha();return}
+.menubtn{width:38px;height:38px;font-size:1.2rem}
+:root{--display:"Barlow Semi Condensed","Arial Narrow",Arial,sans-serif;--body:"Source Sans 3","Segoe UI",Arial,sans-serif;--neutral-bg:#e6e2d8}
+:root[data-theme="dark"]{--neutral-bg:#212b26}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--neutral-bg:#212b26}}
+.sheet h2{text-transform:none;letter-spacing:0;color:var(--fg);font:700 1.35rem var(--display)}
+</style><script>try{var t=localStorage.getItem("tema");if(t&&t!=="sistema")document.documentElement.dataset.theme=t}catch(e){}</script><script src="tema.js"></script>
 <title>Lactotropin · Boa Sorte</title>
 <style>
 :root{
@@ -66,8 +72,8 @@ h2{margin:4px 0 0;font-size:1rem;color:var(--muted);text-transform:uppercase;let
 </head>
 <body>
 <header>
-  <div class="top"><h1><a href="index.html" style="color:inherit;text-decoration:none" aria-label="Voltar ao painel">‹</a> <span id="dot" style="font-size:.8em">●</span> Lactotropin <small id="modo" hidden style="font-size:.6em;color:var(--muted);font-weight:700">· só acompanhando</small></h1>
-    <span style="display:flex;gap:6px;align-items:center"><select id="data"></select><button id="mais" aria-label="Mais opções" style="font:800 1.1rem inherit;font-family:inherit;background:var(--surface);border:1px solid var(--line);border-radius:8px;color:var(--fg);padding:4px 10px;cursor:pointer">⋯</button></span></div>
+  <div class="top"><h1><span id="dot" style="font-size:.8em">●</span> Lactotropin <small id="modo" hidden style="font-size:.6em;color:var(--muted);font-weight:700">· só acompanhando</small></h1>
+    <span style="display:flex;gap:6px;align-items:center"><select id="data"></select><button id="mais" aria-label="Mais opções" style="font:800 1.1rem inherit;font-family:inherit;background:var(--surface);border:1px solid var(--line);border-radius:8px;color:var(--fg);padding:4px 10px;cursor:pointer">⋯</button><button class="menubtn" id="menubtn" aria-label="Menu">☰</button></span></div>
   <div id="info" class="panel" hidden style="margin-top:8px;display:grid;gap:6px;font-size:.9rem">
     <div class="sub" id="fonte"></div><div id="sync" style="font-weight:700">conectando…</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap"><button id="sair" class="ib">Sair</button><button id="zerar" class="ib">Zerar marcações desta data</button></div></div>
@@ -84,6 +90,11 @@ h2{margin:4px 0 0;font-size:1rem;color:var(--muted);text-transform:uppercase;let
   <button id="lver" class="ib" style="padding:12px">Só acompanhar (não marca nada · só precisa do código)</button>
   <p id="lmsg" style="margin:0;color:var(--nao);font-weight:700"></p>
 </div>
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-label="Menu"><div class="in"><div class="hd"><h2>Menu</h2><button class="menubtn" id="fecha" aria-label="Fechar">✕</button></div>
+<div style="font-weight:700;margin-top:4px">Painel</div><a class="ctl" style="text-decoration:none" href="./"><b>Controle leiteiro</b><small>controle mais recente</small><span class="tagc">ABRIR</span></a>
+<div style="font-weight:700;margin-top:10px">Reprodução</div><a class="ctl" style="text-decoration:none" href="reproducao.html"><b>Prodap mais recente</b><small>gestantes, partos e secagens</small><span class="tagc">ABRIR</span></a>
+<div style="font-weight:700;margin-top:14px">Manejo · equipe</div><button class="ctl" aria-current="true" onclick="document.getElementById('sheet').hidden=true"><b>Lactotropin · aplicação</b><small>marcar no brete as vacas que já passaram</small><span class="tagc">ABERTO</span></button>
+</div></div>
 <main>
   <div class="panel"><div class="count"><span id="ctxt"></span><b id="cnum"></b></div><div class="bar"><i id="cbar"></i></div></div>
   <h2 id="hPend">Ainda não passaram</h2>
@@ -216,6 +227,7 @@ $('zerar').addEventListener('click',()=>{
   const c=(window.prompt?prompt(`Isto zera as marcações de ${D.datas[di]} em TODOS os celulares.\nDigite o código da fazenda para confirmar:`):null);
   if(c===null)return; if(c.trim()!==COD){aviso('zerar','Código errado: nada foi zerado',false);return}
   acao('*','zerou');aviso('zerar','Marcações zeradas',false)});
+$('menubtn').addEventListener('click',()=>{$('sheet').hidden=false});$('fecha').addEventListener('click',()=>{$('sheet').hidden=true});$('sheet').addEventListener('click',e=>{if(e.target.id==='sheet')$('sheet').hidden=true});
 $('mais').addEventListener('click',()=>{$('info').hidden=!$('info').hidden});
 $('sair').addEventListener('click',()=>{if(!confirm('Sair deste celular? As marcações já enviadas continuam na planilha.'))return;NOME='';COD='';ls('lacto_nome','');ls('lacto_cod','');status('desconectado',false);pedirAcesso()});
 const entrar=ver=>{NOME=$('lnome').value.trim();COD=$('lcod').value.trim();if(ver&&!NOME)NOME='Espectador';
