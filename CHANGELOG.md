@@ -7,9 +7,10 @@ Formato **maior.média.menor** (versionamento semântico), só para controle int
 
 O número `painel-vN` do `sw.js` é outra coisa: é o contador da cópia guardada no celular (sobe a cada mudança que o celular precisa baixar).
 
-**Versão atual: 1.5.8** (24/10/2026)
+**Versão atual: 1.5.9** (24/10/2026)
 
 ## 1.5 · Avisos do Lactotropin (24/10)
+- 1.5.9 · Lactotropin: botões de lote grandes de novo (arrastando), com "faltam" embaixo; Primíparas = "Lote N".
 - 1.5.8 · Lactotropin: os 6 lotes numa linha só (Todas, L1, L2, L3, PP, N) com "faltam".
 - 1.5.7 · Texto do menu Avisos inclui o Lactotropin.
 - 1.5.6 · Fora do dia da aplicação, pergunta "tem certeza?" na 1ª vaca toda vez que a tela abre.
