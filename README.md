@@ -26,3 +26,10 @@ Site estático (GitHub Pages) instalado como app no celular.
 - Segredos (Settings → Secrets → Actions): `VAPID_PRIVADA` e `ASSINATURAS` (códigos dos celulares, um por linha; editar substitui tudo).
 - Teste manual: Actions → Avisos diarios → Run workflow; campo opcional "data" simula um dia (dd/mm/aaaa).
 - O toque no aviso abre a aba Secagens (ou Partos).
+
+## Lactotropin (aplicação)
+- Tela `lactotropin.html`, aberta pelo menu ☰. Lê `lactotropin.json` (cronograma) e o lote de cada vaca de `dados.json` (último controle). Vaca do cronograma que não está no último controle não aparece (tratada como seca).
+- Cronograma novo (vem do Renner/Prodap, PDF na pasta do Drive `06_Lactotropin`): substitua `lactotropin.json` inteiro. Campos: `cronograma` (data do PDF), `datas[]` (dd/mm/aaaa), `vacas[]` = [brinco, [true/false por data]] (true = SIM). Confira os totais de SIM por data com o PDF.
+- Marcações compartilhadas: planilha Google `Lactotropin_Marcacoes` (Drive `06_Lactotropin`) via Apps Script (URL em `lactotropin.html`, `URL_API`). Cada toque grava uma linha (quando, data_aplicacao, vaca, acao passou/desfez/zerou, quem). A planilha guarda o brinco 060 como 60; a tela corrige.
+- Código da fazenda pedido na entrada (o mesmo do Apps Script). Modo "Só acompanhar" não grava nada.
+- A tela consulta a planilha a cada 15 s, só com a tela aberta. O `sw.js` não guarda as respostas da planilha.

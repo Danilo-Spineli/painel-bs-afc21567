@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset=utf8><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Boa Sorte"><meta name="theme-color" content="#1e5a3c"><meta name="robots" content="noindex,nofollow"><link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="apple-icon.png"><link rel="icon" href="icone.png"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><script>try{var t=localStorage.getItem("tema");if(t&&t!=="sistema")document.documentElement.dataset.theme=t}catch(e){}</script><script src="tema.js"></script>
+<title>Lactotropin · Boa Sorte</title>
+<style>
+:root{
+  --bg:#ebe8e0;--surface:#f7f5ef;--fg:#1c2622;--muted:#46544d;--line:#d9d4c8;
+  --accent:#1e5a3c;--accent-soft:#e3efe8;--vai:#1e5a3c;--vai-bg:#dff0e6;--nao:#8a3a1d;--nao-bg:#f8e6dc;--done:#eef2ef;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#121815;--surface:#1a221e;--fg:#e4ece7;--muted:#9aa9a1;--line:#2c3832;
+  --accent:#6fc196;--accent-soft:#1f3329;--vai:#8fe0b4;--vai-bg:#1f3a2c;--nao:#ffb08a;--nao-bg:#3d2a20;--done:#212b26;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121815;--surface:#1a221e;--fg:#e4ece7;--muted:#9aa9a1;--line:#2c3832;
+  --accent:#6fc196;--accent-soft:#1f3329;--vai:#8fe0b4;--vai-bg:#1f3a2c;--nao:#ffb08a;--nao-bg:#3d2a20;--done:#212b26;color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--fg);font:18px/1.45 "Source Sans 3","Segoe UI",Roboto,Arial,sans-serif}
+header{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px 16px 8px;border-bottom:1px solid var(--line)}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+h1{margin:0;font-size:1.15rem;color:var(--accent)}
+.sub{color:var(--muted);font-size:.85rem}
+select{font:600 1rem inherit;font-family:inherit;padding:6px 8px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg)}
+.search{margin-top:8px}
+.search input{width:100%;font:700 1.35rem inherit;font-family:inherit;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--surface);color:var(--fg)}
+.search input:focus{outline:none;border-color:var(--accent)}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin-top:8px;padding-bottom:2px;scrollbar-width:none}
+.tab{flex:none;font:700 .95rem inherit;font-family:inherit;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer;white-space:nowrap}
+.tab[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.tab small{font-weight:600;opacity:.85}
+main{max-width:720px;margin:0 auto;padding:12px 16px 80px;display:grid;gap:12px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+.count{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.count b{font-size:1.5rem}
+.bar{height:10px;border-radius:6px;background:var(--done);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--accent)}
+h2{margin:4px 0 0;font-size:1rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.list{display:grid;gap:8px}
+.cow{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;width:100%;text-align:left;font:inherit;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer}
+.cow .id{font-size:1.7rem;font-weight:800;font-variant-numeric:tabular-nums;line-height:1}
+.cow .lt{display:block;font-size:.8rem;color:var(--muted);margin-top:3px}
+.cow .act{font-size:.8rem;color:var(--muted);text-align:right}
+.tag{display:inline-block;font-weight:800;font-size:1rem;padding:6px 10px;border-radius:8px;letter-spacing:.02em}
+.tag.vai{background:var(--vai-bg);color:var(--vai)}
+.tag.nao{background:var(--nao-bg);color:var(--nao)}
+.cow.passou{background:var(--done);opacity:.75}
+.cow.passou .id{text-decoration:line-through;text-decoration-thickness:2px}
+.res .cow{border-width:2px;border-color:var(--accent)}
+.empty{color:var(--muted);font-size:.95rem;padding:4px 2px}
+.foot{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:.85rem}
+.foot button{font:600 .9rem inherit;font-family:inherit;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:6px}
+.blk{font:800 1.15rem inherit;font-family:inherit;font-variant-numeric:tabular-nums;padding:12px 0 8px;border-radius:10px;border:0;cursor:pointer;color:#fff;line-height:1}
+.cow.blk{display:block;text-align:center;padding:10px 0 7px;border:0;width:auto}
+.blk small{display:block;font-size:.65rem;font-weight:700;margin-top:4px;opacity:.9}
+.blk.s{background:#2e7d4f}.blk.n{background:#c0392b}
+.blk.p{background:var(--done);color:var(--muted);text-decoration:line-through}
+.lot h3{margin:0 0 6px;font-size:1rem;display:flex;justify-content:space-between}
+.lot h3 span{color:var(--muted);font-weight:600;font-size:.85rem}
+.res .blk small.l{font-size:.6rem;opacity:.85}
+#resBox{max-height:38vh;overflow:auto}
+.ib{font:600 .9rem inherit;font-family:inherit;padding:8px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);cursor:pointer}
+.toast{margin-top:8px;display:grid;gap:4px;background:none!important;padding:0!important}
+.av{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--fg);color:var(--bg);padding:6px 6px 6px 14px;border-radius:10px;font-weight:700}
+.x{align-items:center;gap:14px;z-index:20;white-space:nowrap;background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:700;font-size:.95rem}
+</style>
+</head>
+<body>
+<header>
+  <div class="top"><h1><a href="index.html" style="color:inherit;text-decoration:none" aria-label="Voltar ao painel">‹</a> <span id="dot" style="font-size:.8em">●</span> Lactotropin</h1>
+    <span style="display:flex;gap:6px;align-items:center"><select id="data"></select><button id="mais" aria-label="Mais opções" style="font:800 1.1rem inherit;font-family:inherit;background:var(--surface);border:1px solid var(--line);border-radius:8px;color:var(--fg);padding:4px 10px;cursor:pointer">⋯</button></span></div>
+  <div id="info" class="panel" hidden style="margin-top:8px;display:grid;gap:6px;font-size:.9rem">
+    <div class="sub" id="fonte"></div><div id="sync" style="font-weight:700">conectando…</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button id="sair" class="ib">Sair</button><button id="zerar" class="ib">Zerar marcações desta data</button></div></div>
+  <div class="search"><input id="q" inputmode="numeric" enterkeyhint="done" autocomplete="off" placeholder="Buscar brinco (qualquer lote)"></div>
+  <div class="toast" id="toast" hidden></div>
+  <div id="resBox" hidden><div class="grid res" id="res" style="margin-top:8px"></div><p class="sub" id="resMsg" style="margin:4px 0 0"></p></div>
+  <div class="tabs" id="tabs"></div>
+</header>
+<div id="login" class="panel" hidden style="max-width:720px;margin:12px auto;display:grid;gap:8px">
+  <b>Antes de começar</b>
+  <input id="lnome" placeholder="Seu nome (aparece nas marcações)" style="font:600 1.1rem inherit;font-family:inherit;padding:10px;border-radius:10px;border:1px solid var(--line)">
+  <input id="lcod" placeholder="Código da fazenda" style="font:600 1.1rem inherit;font-family:inherit;padding:10px;border-radius:10px;border:1px solid var(--line)">
+  <button id="lok" style="font:800 1rem inherit;font-family:inherit;padding:12px;border-radius:10px;border:0;background:#1e5a3c;color:#fff">Entrar para marcar</button>
+  <button id="lver" class="ib" style="padding:12px">Só acompanhar (não marca nada)</button>
+</div>
+<main>
+  <div class="panel"><div class="count"><span id="ctxt"></span><b id="cnum"></b></div><div class="bar"><i id="cbar"></i></div></div>
+  <h2 id="hPend">Ainda não passaram</h2>
+  <div class="list" id="pend"></div>
+  <h2 id="hPass">Já passaram</h2>
+  <div class="list" id="pass"></div>
+  <div class="foot"><span>Toque na vaca para marcar que passou. Toque de novo para desfazer.<br>"Passou" não quer dizer que recebeu: o SIM / NÃO é o do cronograma.</span>
+</div>
+</main>
+<script>
+let D;
+Promise.all([fetch('lactotropin.json',{cache:'no-store'}).then(r=>r.json()),fetch('dados.json',{cache:'no-store'}).then(r=>r.json())]).then(([L,P])=>{
+ const lote=Object.fromEntries(P.vac.map(c=>[c.v,c.l]));
+ D={datas:L.datas,cronograma:L.cronograma,controle:P.cfg.at,vacas:L.vacas.filter(v=>lote[v[0]]).map(v=>[v[0],lote[v[0]],v[1]])};
+ init();
+}).catch(()=>{document.body.insertAdjacentHTML('afterbegin','<p style="padding:16px">Não consegui carregar o cronograma. Verifique a internet e abra de novo.</p>')});
+function init(){
+const LOTES=["Lote 1","Lote 2","Lote 3","Pós-parto","Primíparas","Sem lote"];
+let di=0, aba="Geral", marc={}, por={}, servidor=[], fila=[];
+const URL_API='https://script.google.com/macros/s/AKfycbytyjpKrhUHOWg0bydsm9Ye-FALr2pzOIz5Ajzj2qF6KVOVixZaZQqXrBte3pcdNnMtAQ/exec';
+const $=id=>document.getElementById(id);
+// data padrão: a próxima data (hoje ou depois); se já passaram todas, a última
+(function(){const h=new Date();h.setHours(0,0,0,0);
+  const ds=D.datas.map(s=>{const [d,m,a]=s.split('/');return new Date(+a,m-1,+d)});
+  di=ds.findIndex(x=>x>=h); if(di<0)di=ds.length-1;})();
+const KEY=()=>'lacto_'+D.datas[di];
+const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
+let NOME=ls('lacto_nome')||'', COD=ls('lacto_cod')||'', VER=ls('lacto_modo')==='ver';
+function pedirAcesso(){
+  $('zerar').hidden=VER;
+  if(NOME&&COD){$('login').hidden=true;return true}
+  $('login').hidden=false;$('lnome').value=NOME;$('lcod').value=COD;return false}
+try{fila=JSON.parse(ls('lacto_fila')||'[]')}catch(e){fila=[]}
+const salvaFila=()=>ls('lacto_fila',JSON.stringify(fila));
+function aplicar(){
+  marc={};por={};const d=D.datas[di];
+  servidor.forEach((e,i)=>{if(e.acao==='zerou'){marc={};por={}}else if(e.acao==='passou'){marc[e.v]=i+1;por[e.v]=e.quem}else{delete marc[e.v];delete por[e.v]}});
+  fila.filter(f=>f.data===d).forEach(f=>{if(f.acao==='zerou'){marc={};por={}}else if(f.acao==='passou'){marc[f.v]=f.t;por[f.v]=f.quem}else{delete marc[f.v];delete por[f.v]}});
+}
+function status(t,ok){const e=$('sync');e.textContent=t;e.style.color=ok?'var(--accent)':'var(--nao)';$('dot').style.color=ok?'#2e7d4f':'#c0392b';$('dot').title=t}
+let enviando=false;
+async function enviar(){
+  if(enviando||!fila.length||!COD)return;enviando=true;
+  try{while(fila.length){const f=fila[0];
+    const r=await fetch(URL_API,{method:'POST',body:JSON.stringify({codigo:COD,data:f.data,v:f.v,acao:f.acao,quem:f.quem})});
+    const j=await r.json(); if(j.erro==='codigo'){COD='';ls('lacto_cod','');pedirAcesso();status('⚠ código da fazenda errado',false);break}
+    fila.shift();salvaFila();}
+  }catch(e){}
+  enviando=false; await puxar();
+}
+async function puxar(){
+  if(!COD)return;
+  try{const r=await fetch(URL_API+'?codigo='+encodeURIComponent(COD)+'&data='+encodeURIComponent(D.datas[di])+'&t='+Date.now(),{cache:'no-store'});
+    const j=await r.json(); if(j.erro==='codigo'){COD='';ls('lacto_cod','');pedirAcesso();status('⚠ código da fazenda errado',false);return}
+    (j.ev||[]).forEach(e=>{e.v=String(e.v).trim();if(e.v.length<3)e.v=e.v.padStart(3,'0')});const novo=JSON.stringify(j.ev||[]); if(novo!==JSON.stringify(servidor)){servidor=j.ev||[];aplicar();render()}
+    const hh=new Date().toLocaleTimeString('pt-BR');status(fila.length?`⟳ ${fila.length} marcação(ões) enviando…`:`● sincronizado · ${NOME}${VER?' (só acompanha)':''} · atualizado ${hh} · ${servidor.length} registros`,!fila.length);
+  }catch(e){status(`⚠ sem sinal · ${fila.length} marcação(ões) guardada(s) no celular`,false)}
+}
+function acao(v,tipo){fila.push({data:D.datas[di],v,acao:tipo,quem:NOME,t:Date.now()});salvaFila();aplicar();render();status(`⟳ ${fila.length} marcação(ões) enviando…`,false);enviar()}
+$('data').innerHTML=D.datas.map((d,i)=>`<option value="${i}">${d.slice(0,5)}</option>`).join('');
+$('data').value=di;
+$('fonte').textContent=`Cronograma Prodap ${D.cronograma.slice(0,5)} · lotes do controle ${D.controle}`;
+const vai=v=>v[2][di];
+const lotesUsados=LOTES.filter(l=>D.vacas.some(v=>v[1]===l));
+function card(v,showLote){
+  const p=!!marc[v[0]];
+  return `<button class="cow${p?' passou':''}" data-v="${v[0]}"><span><span class="id">${v[0]}</span>${showLote?`<span class="lt">${v[1]} (controle ${D.controle.slice(0,5)})</span>`:''}</span>
+  <span class="act"><span class="tag ${vai(v)?'vai':'nao'}">${vai(v)?'SIM':'NÃO'}</span>${p?'<br>passou':''}</span></button>`;
+}
+function tabs(){
+  const n=l=>{const g=D.vacas.filter(v=>l==='Geral'||v[1]===l);return `${g.filter(v=>!marc[v[0]]).length}`};
+  $('tabs').innerHTML=['Geral',...lotesUsados].map(l=>`<button class="tab" aria-pressed="${l===aba}" data-t="${l}">${l} <small>· faltam ${n(l)}</small></button>`).join('');
+}
+function blk(v){const p=!!marc[v[0]];return `<button class="cow blk ${p?'p':(vai(v)?'s':'n')}" data-v="${v[0]}">${v[0]}<small>${vai(v)?'SIM':'NÃO'}</small>${p&&por[v[0]]?`<small>${por[v[0]]}</small>`:''}</button>`}
+function render(){
+  const ls=aba==='Geral'?['Geral']:[aba];
+  let tp=0,tt=0,ts=0,html='',ph='';
+  for(const l of ls){
+    const g=D.vacas.filter(v=>l==='Geral'||v[1]===l).sort((a,b)=>(+a[0])-(+b[0]));
+    const pend=g.filter(v=>!marc[v[0]]), pas=g.filter(v=>marc[v[0]]).sort((a,b)=>marc[b[0]]-marc[a[0]]);
+    tp+=pend.length;tt+=g.length;ts+=pend.filter(vai).length;
+    html+=`<div class="panel lot"><h3>${l==='Geral'?'Todas':l}<span>faltam ${pend.length} de ${g.length}</span></h3><div class="grid">${pend.map(blk).join('')||'<p class="empty">Todas já passaram.</p>'}</div></div>`;
+    if(pas.length) ph+=`<div class="panel lot"><h3>${l}<span>${pas.length} passaram</span></h3><div class="grid">${pas.map(blk).join('')}</div></div>`;
+  }
+  $('pend').innerHTML=html; $('pass').innerHTML=ph||'<p class="empty">Nenhuma ainda.</p>';
+  $('ctxt').textContent=`${aba} · ${D.datas[di].slice(0,5)} · faltam`;
+  $('cnum').textContent=`${tp} de ${tt}`;
+  $('cbar').style.width=tt?(((tt-tp)/tt)*100)+'%':'0';
+  $('hPend').textContent=`Ainda não passaram (${tp}) · ${ts} SIM`;
+  $('hPass').textContent=`Já passaram (${tt-tp})`;
+  tabs(); busca();
+}
+function busca(){
+  const q=$('q').value.replace(/\D/g,'');
+  if(!q){$('resBox').hidden=true;return}
+  const ex=D.vacas.filter(v=>v[0]===q), pre=D.vacas.filter(v=>v[0]!==q&&v[0].startsWith(q)), con=D.vacas.filter(v=>!v[0].startsWith(q)&&v[0].includes(q));
+  const r=[...ex,...pre,...con];
+  $('resBox').hidden=false;
+  $('res').innerHTML=r.map(v=>blk(v).replace('</button>',`<small class="l">${v[1].replace('Lote ','L').replace('Primíparas','Prim').replace('Pós-parto','PP')}</small></button>`)).join('');
+  $('resMsg').textContent=r.length?(ex.length?'':'Nenhuma vaca com esse número exato; mostrando parecidas.'):'Brinco não está no cronograma.';
+}
+let trava=0;
+const BTN='font:800 .95rem inherit;font-family:inherit;background:#1e5a3c;border:0;border-radius:8px;color:#fff;padding:7px 12px;cursor:pointer';
+function aviso(v,txt,undo){const box=$('toast');box.hidden=false;
+  box.querySelectorAll(`[data-a="${v}"]`).forEach(x=>x.remove());
+  const r=document.createElement('div');r.className='av';r.dataset.a=v;
+  r.innerHTML=`<span>${txt}</span>`+(undo?`<button class="desf" data-u="${v}" style="${BTN}">DESFAZER</button>`:'');
+  box.prepend(r);while(box.children.length>4)box.lastChild.remove();
+  setTimeout(()=>{r.remove();if(!box.children.length)box.hidden=true},undo?8000:1800)}
+document.addEventListener('click',e=>{
+  if(e.target.classList.contains('desf')){const u=e.target.dataset.u;if(marc[u])acao(u,'desfez');aviso(u,`${u} voltou para pendentes`,false);return}
+  const c=e.target.closest('.cow');
+  if(c&&Date.now()<trava)return;
+  if(c&&VER){aviso('ver','Modo só acompanhar: não marca vacas',false);return}
+  if(c){const v=c.dataset.v;
+    const fromSearch=!!c.closest('#res');
+    if(marc[v]){acao(v,'desfez');aviso(v,`${v} desmarcada`,false)} else {acao(v,'passou');trava=Date.now()+700;aviso(v,`${v} passou`,true)}
+    if(fromSearch){$('q').value='';busca();$('q').focus()}
+    return}
+  const t=e.target.closest('.tab'); if(t){aba=t.dataset.t;render();window.scrollTo(0,0)}
+});
+$('q').addEventListener('input',busca);
+$('q').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('q').blur()}});
+$('data').addEventListener('change',e=>{di=+e.target.value;servidor=[];aplicar();render();puxar()});
+$('zerar').addEventListener('click',()=>{
+  const c=(window.prompt?prompt(`Isto zera as marcações de ${D.datas[di]} em TODOS os celulares.\nDigite o código da fazenda para confirmar:`):null);
+  if(c===null)return; if(c.trim()!==COD){aviso('zerar','Código errado: nada foi zerado',false);return}
+  acao('*','zerou');aviso('zerar','Marcações zeradas',false)});
+$('mais').addEventListener('click',()=>{$('info').hidden=!$('info').hidden});
+$('sair').addEventListener('click',()=>{if(!confirm('Sair deste celular? As marcações já enviadas continuam na planilha.'))return;NOME='';COD='';ls('lacto_nome','');ls('lacto_cod','');status('desconectado',false);pedirAcesso()});
+const entrar=ver=>{NOME=$('lnome').value.trim();COD=$('lcod').value.trim();if(!NOME||!COD)return;VER=ver;ls('lacto_modo',ver?'ver':'marcar');ls('lacto_nome',NOME);ls('lacto_cod',COD);pedirAcesso();enviar();puxar()};
+$('lok').addEventListener('click',()=>entrar(false));
+$('lver').addEventListener('click',()=>entrar(true));
+pedirAcesso(); aplicar(); render(); enviar(); puxar(); setInterval(()=>{if(!document.hidden){enviar();puxar()}},15000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){enviar();puxar()}});
+}
+try{if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js')}catch(e){}
+</script>
+</body>
+</html>
