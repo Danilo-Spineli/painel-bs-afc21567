@@ -15,12 +15,12 @@ if(secAmanha.length)L.push('Secar amanhã: '+secAmanha.map(nota).join(', '));
 const parHoje=R.gestantes.filter(g=>dif(g.parto)===0);
 if(parHoje.length)L.push('Parto previsto hoje: '+parHoje.map(g=>g.v+(g.cat==='novilha'?' (novilha)':'')).join(', '));
 const teste=process.env.TESTE==='1';
-if(!L.length&&!teste){console.log('Nada para avisar hoje.');process.exit(0)}
+if(!L.length&&!teste){console.log('::notice::Nada para avisar hoje.');process.exit(0)}
 const dia=hoje.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'2-digit'});
 const msg={title:teste?'FBS · aviso de teste':'FBS · '+dia,body:teste?(L.length?L.join('\n'):'Os avisos estão funcionando. Hoje não há secagem nem parto previsto.'):L.join('\n'),url:'reproducao.html'};
 webpush.setVapidDetails('mailto:painel@users.noreply.github.com',process.env.VAPID_PUBLICA,process.env.VAPID_PRIVADA);
 const subs=(process.env.ASSINATURAS||'').split(/[\s,]+/).filter(Boolean).map(c=>JSON.parse(Buffer.from(c,'base64').toString()));
-console.log(`Aviso: ${msg.title} | ${L.length} linha(s) | ${subs.length} celular(es)`);
+console.log(`::notice::Aviso: ${msg.title} | ${L.length} linha(s) | ${subs.length} celular(es)`);
 Promise.allSettled(subs.map(s=>webpush.sendNotification(s,JSON.stringify(msg)))).then(r=>{
- r.forEach((x,i)=>console.log('celular',i+1,x.status==='fulfilled'?'ok':'falhou: '+(x.reason&&x.reason.statusCode)));
+ r.forEach((x,i)=>console.log(`::notice::celular ${i+1}: `+(x.status==='fulfilled'?'enviado '+x.value.statusCode:'falhou '+(x.reason&&x.reason.statusCode)+' '+String(x.reason&&x.reason.body||'').slice(0,120))));
  if(r.length&&r.every(x=>x.status!=='fulfilled'))process.exit(1)});

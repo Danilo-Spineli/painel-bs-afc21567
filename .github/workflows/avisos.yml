@@ -22,4 +22,4 @@ jobs:
           VAPID_PUBLICA: BMo96EQtufIs-vg4sDDIBWDQuaDr5kEUqqvjPc8U19JUFKmJJerboaepEKSy7wzeAUgOIipC3BoAWq0dPxUgbB0
           VAPID_PRIVADA: ${{ secrets.VAPID_PRIVADA }}
           ASSINATURAS: ${{ secrets.ASSINATURAS }}
-          TESTE: ${{ github.event_name == 'workflow_dispatch' && inputs.teste && '1' || '0' }}
+          TESTE: ${{ github.event_name == 'workflow_dispatch' && '1' || '0' }}
