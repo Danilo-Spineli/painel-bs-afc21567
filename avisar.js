@@ -21,6 +21,6 @@ const msg={title:teste?'FBS · aviso de teste':'FBS · '+dia,body:teste?(L.lengt
 webpush.setVapidDetails('mailto:painel@users.noreply.github.com',process.env.VAPID_PUBLICA,process.env.VAPID_PRIVADA);
 const subs=(process.env.ASSINATURAS||'').split(/[\s,]+/).filter(Boolean).map(c=>JSON.parse(Buffer.from(c,'base64').toString()));
 console.log(`::notice::Aviso: ${msg.title} | ${L.length} linha(s) | ${subs.length} celular(es)`);
-Promise.allSettled(subs.map(s=>webpush.sendNotification(s,JSON.stringify(msg)))).then(r=>{
+Promise.allSettled(subs.map(s=>webpush.sendNotification(s,JSON.stringify(msg),{urgency:'high',TTL:43200}))).then(r=>{
  r.forEach((x,i)=>console.log(`::notice::celular ${i+1}: `+(x.status==='fulfilled'?'enviado '+x.value.statusCode:'falhou '+(x.reason&&x.reason.statusCode)+' '+String(x.reason&&x.reason.body||'').slice(0,120))));
  if(r.length&&r.every(x=>x.status!=='fulfilled'))process.exit(1)});
