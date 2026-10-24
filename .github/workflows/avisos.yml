@@ -8,6 +8,10 @@ on:
         description: 'Mandar aviso de teste agora'
         type: boolean
         default: true
+      data:
+        description: 'Simular uma data (dd/mm/aaaa), so para teste'
+        required: false
+        default: ''
 jobs:
   avisar:
     runs-on: ubuntu-latest
@@ -22,4 +26,5 @@ jobs:
           VAPID_PUBLICA: BMo96EQtufIs-vg4sDDIBWDQuaDr5kEUqqvjPc8U19JUFKmJJerboaepEKSy7wzeAUgOIipC3BoAWq0dPxUgbB0
           VAPID_PRIVADA: ${{ secrets.VAPID_PRIVADA }}
           ASSINATURAS: ${{ secrets.ASSINATURAS }}
+          HOJE: ${{ github.event_name == 'workflow_dispatch' && inputs.data || '' }}
           TESTE: ${{ github.event_name == 'workflow_dispatch' && '1' || '0' }}
