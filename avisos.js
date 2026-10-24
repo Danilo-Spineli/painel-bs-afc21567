@@ -17,7 +17,7 @@
    if(!suporta){box.innerHTML='<div style="font-weight:700">Avisos</div><p class="note">Este navegador não aceita avisos.</p>';return}
    if(!app){box.innerHTML='<div style="font-weight:700">Avisos</div><p class="note">Instale o app na tela inicial para receber avisos.</p>';return}
    if(Notification.permission==='denied'){box.innerHTML='<div style="font-weight:700">Avisos</div><p class="note">As notificações deste app estão bloqueadas nas configurações do celular.</p>';return}
-   box.innerHTML='<div style="font-weight:700">Avisos</div><p class="note">Secagem (um dia antes e no dia) e parto previsto (no dia), às 7h.</p><button class="ctl" id="avon" style="grid-template-columns:1fr"><b style="font-size:1.05rem">Ativar avisos</b><small>neste celular</small></button>';
+   box.innerHTML='<div style="font-weight:700">Avisos</div><p class="note">Secagem (véspera e dia) e parto (dia), às 7h. Lactotropin: véspera às 7h e no dia às 6h.</p><button class="ctl" id="avon" style="grid-template-columns:1fr"><b style="font-size:1.05rem">Ativar avisos</b><small>neste celular</small></button>';
    box.querySelector('#avon').onclick=async()=>{try{
      if(await Notification.requestPermission()!=='granted'){inicial();return}
      const reg=await navigator.serviceWorker.ready;

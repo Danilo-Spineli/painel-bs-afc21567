@@ -7,9 +7,10 @@ Formato **maior.média.menor** (versionamento semântico), só para controle int
 
 O número `painel-vN` do `sw.js` é outra coisa: é o contador da cópia guardada no celular (sobe a cada mudança que o celular precisa baixar).
 
-**Versão atual: 1.5.6** (24/10/2026)
+**Versão atual: 1.5.7** (24/10/2026)
 
 ## 1.5 · Avisos do Lactotropin (24/10)
+- 1.5.7 · Texto do menu Avisos inclui o Lactotropin.
 - 1.5.6 · Fora do dia da aplicação, pergunta "tem certeza?" na 1ª vaca toda vez que a tela abre.
 - 1.5.5 · "Sair" apaga as confirmações de fora do dia.
 - 1.5.4 · Título dos avisos: "Fazenda Boa Sorte".
