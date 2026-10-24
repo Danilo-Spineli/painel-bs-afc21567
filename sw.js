@@ -1,5 +1,5 @@
 // Guarda o app e os dados no celular para abrir sem internet.
-const CACHE='painel-v12';
+const CACHE='painel-v13';
 const BASE=['./','index.html','logo.png','manifest.json','icone-192.png','icone.png','apple-icon.png','dados.json','controles/lista.json','reproducao.html','reproducao.json','instalar.js','tema.js','avisos.js','badge.png'];
 const chave=u=>{const x=new URL(u);return x.origin+x.pathname};
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>Promise.all(BASE.map(p=>fetch(p,{cache:'no-store'}).then(r=>r.ok&&c.put(chave(new URL(p,self.registration.scope)),r)).catch(()=>{})))).then(()=>self.skipWaiting()))});
@@ -17,10 +17,6 @@ self.addEventListener('fetch',e=>{
 });
 // Avisos diários
 self.addEventListener('push',e=>{let d={};try{d=e.data.json()}catch(x){d={title:'FBS',body:e.data?e.data.text():''}}
- const t=d.title||'FBS', base={body:d.body||'',tag:d.tag||'fbs-dia',data:{url:d.url||'reproducao.html'}};
- const reg=self.registration;
- e.waitUntil(reg.showNotification(t,Object.assign({},base,{badge:'badge.png',renotify:true,vibrate:[300,150,300,150,600]}))
-  .catch(()=>reg.showNotification(t,Object.assign({},base,{badge:'badge.png'})))
-  .catch(()=>reg.showNotification(t,{body:base.body,data:base.data})))});
+ e.waitUntil(self.registration.showNotification(d.title||'FBS',{body:d.body||'',icon:'icone-192.png',badge:'badge.png',tag:d.tag||'fbs-dia',renotify:true,data:{url:d.url||'reproducao.html'}}))});
 self.addEventListener('notificationclick',e=>{e.notification.close();const u=new URL(e.notification.data&&e.notification.data.url||'./',self.registration.scope).href;
  e.waitUntil(clients.matchAll({type:'window',includeUncontrolled:true}).then(cs=>{for(const c of cs){if('focus' in c){c.navigate(u);return c.focus()}}return clients.openWindow(u)}))});
