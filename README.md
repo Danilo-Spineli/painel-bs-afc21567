@@ -19,3 +19,10 @@ Site estático (GitHub Pages) instalado como app no celular.
 1. Vaca que não aparece no controle de leite não está sendo ordenhada: tratar como seca.
 2. Parto previsto já passou e a vaca não tem medida no último controle: ATENÇÃO (pode estar atrasada e não ter parido). Aparece no topo do Resumo da Reprodução.
 3. Não inventar critérios (ex.: limites de DEL para trocar de lote). Critérios novos vêm dele.
+
+## Avisos no celular (regras do Danilo)
+- Secagem: aviso na véspera e no dia. Parto previsto: aviso no dia. Horário: 7h (Brasília). Sem nada no dia, não envia.
+- Enviado por `.github/workflows/avisos.yml` + `avisar.js`, com prioridade alta (Samsung segura avisos normais).
+- Segredos (Settings → Secrets → Actions): `VAPID_PRIVADA` e `ASSINATURAS` (códigos dos celulares, um por linha; editar substitui tudo).
+- Teste manual: Actions → Avisos diarios → Run workflow; campo opcional "data" simula um dia (dd/mm/aaaa).
+- O toque no aviso abre a aba Secagens (ou Partos).
