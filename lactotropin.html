@@ -117,6 +117,7 @@ function pedirAcesso(){
   if(NOME&&COD){$('login').hidden=true;return true}
   $('login').hidden=false;$('lnome').value=NOME;$('lcod').value=COD;return false}
 try{fila=JSON.parse(ls('lacto_fila')||'[]')}catch(e){fila=[]}
+fila=fila.filter(f=>f&&f.quem&&f.data&&f.v);
 const salvaFila=()=>ls('lacto_fila',JSON.stringify(fila));
 function aplicar(){
   marc={};por={};const d=D.datas[di];
@@ -128,6 +129,7 @@ let enviando=false;
 async function enviar(){
   if(enviando||!fila.length||!COD)return;enviando=true;
   try{while(fila.length){const f=fila[0];
+    if(!f.quem||VER){fila.shift();salvaFila();continue}
     const r=await fetch(URL_API,{method:'POST',body:JSON.stringify({codigo:COD,data:f.data,v:f.v,acao:f.acao,quem:f.quem})});
     const j=await r.json(); if(j.erro==='codigo'){COD='';ls('lacto_cod','');pedirAcesso();status('⚠ código da fazenda errado',false);break}
     fila.shift();salvaFila();}
@@ -142,7 +144,8 @@ async function puxar(){
     const hh=new Date().toLocaleTimeString('pt-BR');status(fila.length?`⟳ ${fila.length} marcação(ões) enviando…`:`● sincronizado · ${NOME}${VER?' (só acompanha)':''} · atualizado ${hh} · ${servidor.length} registros`,!fila.length);
   }catch(e){status(`⚠ sem sinal · ${fila.length} marcação(ões) guardada(s) no celular`,false)}
 }
-function acao(v,tipo){if(VER)return;fila.push({data:D.datas[di],v,acao:tipo,quem:NOME,t:Date.now()});salvaFila();aplicar();render();status(`⟳ ${fila.length} marcação(ões) enviando…`,false);enviar()}
+const podeMarcar=()=>!!(NOME&&COD&&!VER);
+function acao(v,tipo){if(!podeMarcar())return;fila.push({data:D.datas[di],v,acao:tipo,quem:NOME,t:Date.now()});salvaFila();aplicar();render();status(`⟳ ${fila.length} marcação(ões) enviando…`,false);enviar()}
 $('data').innerHTML=D.datas.map((d,i)=>`<option value="${i}">${d.slice(0,5)}</option>`).join('');
 $('data').value=di;
 $('fonte').textContent=`Cronograma Prodap ${D.cronograma.slice(0,5)} · lotes do controle ${D.controle}`;
@@ -197,7 +200,7 @@ document.addEventListener('click',e=>{
   if(e.target.classList.contains('desf')){const u=e.target.dataset.u;if(marc[u])acao(u,'desfez');aviso(u,`${u} voltou para pendentes`,false);return}
   const c=e.target.closest('.cow');
   if(c&&Date.now()<trava)return;
-  if(c&&VER){aviso('ver','Modo só acompanhar: não marca vacas',false);return}
+  if(c&&!podeMarcar()){aviso('ver',VER?'Modo só acompanhar: não marca vacas':'Entre com nome e código para marcar',false);if(!VER)pedirAcesso();return}
   if(c){const v=c.dataset.v;
     const fromSearch=!!c.closest('#res');
     if(marc[v]){acao(v,'desfez');aviso(v,`${v} desmarcada`,false)} else {acao(v,'passou');trava=Date.now()+700;aviso(v,`${v} passou`,true)}
@@ -209,6 +212,7 @@ $('q').addEventListener('input',busca);
 $('q').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('q').blur()}});
 $('data').addEventListener('change',e=>{di=+e.target.value;servidor=[];aplicar();render();puxar()});
 $('zerar').addEventListener('click',()=>{
+  if(!podeMarcar())return;
   const c=(window.prompt?prompt(`Isto zera as marcações de ${D.datas[di]} em TODOS os celulares.\nDigite o código da fazenda para confirmar:`):null);
   if(c===null)return; if(c.trim()!==COD){aviso('zerar','Código errado: nada foi zerado',false);return}
   acao('*','zerou');aviso('zerar','Marcações zeradas',false)});
