@@ -119,10 +119,14 @@ const $=id=>document.getElementById(id);
 // data padrão: a próxima data (hoje ou depois); se já passaram todas, a última
 (function(){const h=new Date();h.setHours(0,0,0,0);
   const ds=D.datas.map(s=>{const [d,m,a]=s.split('/');return new Date(+a,m-1,+d)});
-  di=ds.findIndex(x=>x>=h); if(di<0)di=ds.length-1;})();
+  // fica na aplicação que passou por até 5 dias (atraso/emergência); depois vai para a próxima
+  const DIAS=86400000; let k=-1;
+  ds.forEach((x,i)=>{const atras=(h-x)/DIAS; if(atras>=0&&atras<=5)k=i});
+  di=k>=0?k:ds.findIndex(x=>x>=h); if(di<0)di=ds.length-1;})();
 const KEY=()=>'lacto_'+D.datas[di];
 const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
 let NOME=ls('lacto_nome')||'', COD=ls('lacto_cod')||'', VER=ls('lacto_modo')==='ver';
+if((NOME||COD)&&ls('lacto_aplic')!==D.datas[di]){NOME='';COD='';ls('lacto_nome','');ls('lacto_cod','')} // entrada vale só para a aplicação em que foi feita
 function pedirAcesso(){
   $('zerar').hidden=VER;$('modo').hidden=!VER;
   if(NOME&&COD){$('login').hidden=true;return true}
@@ -232,7 +236,7 @@ $('mais').addEventListener('click',()=>{$('info').hidden=!$('info').hidden});
 $('sair').addEventListener('click',()=>{if(!confirm('Sair deste celular? As marcações já enviadas continuam na planilha.'))return;NOME='';COD='';ls('lacto_nome','');ls('lacto_cod','');status('desconectado',false);pedirAcesso()});
 const entrar=ver=>{NOME=$('lnome').value.trim();COD=$('lcod').value.trim();if(ver&&!NOME)NOME='Espectador';
   if(!COD){$('lmsg').textContent='Digite o código da fazenda.';return} if(!NOME){$('lmsg').textContent='Digite seu nome para marcar (ou toque em Só acompanhar).';return}
-  $('lmsg').textContent='';VER=ver;ls('lacto_modo',ver?'ver':'marcar');ls('lacto_nome',NOME);ls('lacto_cod',COD);pedirAcesso();enviar();puxar()};
+  $('lmsg').textContent='';VER=ver;ls('lacto_modo',ver?'ver':'marcar');ls('lacto_aplic',D.datas[di]);ls('lacto_nome',NOME);ls('lacto_cod',COD);pedirAcesso();enviar();puxar()};
 $('lok').addEventListener('click',()=>entrar(false));
 $('lver').addEventListener('click',()=>entrar(true));
 pedirAcesso(); aplicar(); render(); enviar(); puxar(); setInterval(()=>{if(!document.hidden){enviar();puxar()}},15000);
