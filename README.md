@@ -1,5 +1,7 @@
 # Painel de controle leiteiro
 
+Versões e o que mudou em cada uma: `CHANGELOG.md` (formato maior.média.menor). A cada mudança, acrescente a linha e atualize "Versão atual".
+
 Site estático (GitHub Pages) instalado como app no celular.
 
 ## Atualizar com um controle novo
