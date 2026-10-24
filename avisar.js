@@ -23,11 +23,16 @@ try{const LT=JSON.parse(fs.readFileSync('lactotropin.json','utf8'));
   if(MODO!=='lacto'&&dif(d)===1){lacAviso=d;L.push(`Amanhã (${d.slice(0,5)}) tem Lactotropin: aplicar em ${n} vacas`)}});
 }catch(e){}
 if(MODO==='lacto')L.splice(0,L.length,...L.filter(x=>x.includes('Lactotropin')));
+// Teste manual no modo lacto sem nada hoje: manda o aviso real da próxima aplicação ("daqui N dias").
+let lacProx=false;
+if(process.env.TESTE==='1'&&MODO==='lacto'&&!L.length){try{const LT=JSON.parse(fs.readFileSync('lactotropin.json','utf8'));
+ const i=LT.datas.findIndex(d=>dif(d)>0);if(i>=0){const d=LT.datas[i],n=LT.vacas.filter(v=>ord.has(v[0])&&v[1][i]).length,k=dif(d);
+  L.push(`Lactotropin daqui ${k} dia${k>1?'s':''} (${d.slice(0,5)}): aplicar em ${n} vacas`);lacAviso=d;lacProx=true}}catch(e){}}
 const teste=process.env.TESTE==='1';
 if(!L.length&&!teste){console.log('::notice::Nada para avisar hoje.');process.exit(0)}
 const dia=hoje.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'2-digit'});
 const Dia=dia.charAt(0).toUpperCase()+dia.slice(1);
-const msg={title:teste?'Teste · '+Dia:Dia,body:teste?(L.length?L.join('\n'):'Os avisos estão funcionando. Hoje não há secagem nem parto previsto.'):L.join('\n'),url:(lacAviso&&!secHoje.length&&!secAmanha.length&&!parHoje.length)?'lactotropin.html':'reproducao.html'+(secHoje.length||secAmanha.length?'#secagens':parHoje.length?'#partos':'')};
+const msg={title:teste&&!lacProx?'Teste · '+Dia:Dia,body:teste?(L.length?L.join('\n'):'Os avisos estão funcionando. Hoje não há secagem nem parto previsto.'):L.join('\n'),url:(lacAviso&&!secHoje.length&&!secAmanha.length&&!parHoje.length)?'lactotropin.html':'reproducao.html'+(secHoje.length||secAmanha.length?'#secagens':parHoje.length?'#partos':'')};
 webpush.setVapidDetails('mailto:painel@users.noreply.github.com',process.env.VAPID_PUBLICA,process.env.VAPID_PRIVADA);
 const subs=(process.env.ASSINATURAS||'').split(/[\s,]+/).filter(Boolean).map(c=>JSON.parse(Buffer.from(c,'base64').toString()));
 console.log(`::notice::Aviso: ${msg.title} | ${L.length} linha(s) | ${subs.length} celular(es)`);
