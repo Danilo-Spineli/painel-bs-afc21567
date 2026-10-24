@@ -2,6 +2,7 @@ name: Avisos diarios
 on:
   schedule:
     - cron: '50 9 * * *'   # 6h50 em Brasilia (o GitHub costuma atrasar alguns minutos)
+    - cron: '40 8 * * *'   # 5h40 em Brasilia: so o aviso do Lactotropin no dia da aplicacao
   workflow_dispatch:
     inputs:
       teste:
@@ -12,6 +13,10 @@ on:
         description: 'Simular uma data (dd/mm/aaaa), so para teste'
         required: false
         default: ''
+      modo:
+        description: 'normal = aviso das 7h; lacto = aviso das 6h do Lactotropin'
+        required: false
+        default: 'normal'
 jobs:
   avisar:
     runs-on: ubuntu-latest
@@ -28,3 +33,4 @@ jobs:
           ASSINATURAS: ${{ secrets.ASSINATURAS }}
           HOJE: ${{ github.event_name == 'workflow_dispatch' && inputs.data || '' }}
           TESTE: ${{ github.event_name == 'workflow_dispatch' && '1' || '0' }}
+          MODO: ${{ github.event.schedule == '40 8 * * *' && 'lacto' || inputs.modo || 'normal' }}
