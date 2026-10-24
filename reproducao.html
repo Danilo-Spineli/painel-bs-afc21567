@@ -290,6 +290,7 @@ Promise.all([fx('reproducao.json'),fx('dados.json').catch(()=>null)]).then(([R,D
  document.addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(b&&!b.closest('#res')){pick(b.dataset.v);show('vaca');scrollTo({top:0})}});
  pick(G[0].v);
  try{const t=localStorage.getItem('rtab');if(t)show(t)}catch(e){}
+ const abaHash=()=>{const h=location.hash.slice(1);if(['resumo','partos','secagens','vaca','vazias'].includes(h)){show(h);scrollTo({top:0})}};abaHash();addEventListener('hashchange',abaHash);
 }).catch(()=>{document.querySelector('main').insertAdjacentHTML('afterbegin','<div class="panel" style="margin-top:16px">Não consegui carregar a reprodução. Verifique a internet e abra de novo.</div>')});
 </script>
 <script src="instalar.js"></script>
