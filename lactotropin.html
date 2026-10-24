@@ -160,13 +160,13 @@ async function puxar(){
   }catch(e){status(`⚠ sem sinal · ${fila.length} marcação(ões) guardada(s) no celular`,false)}
 }
 const podeMarcar=()=>!!(NOME&&COD&&!VER);
-// fora de época: hoje fora de 3 dias antes / 3 dias depois da data selecionada -> confirma na 1ª vaca
-function foraDeEpoca(){const [d,m,y]=D.datas[di].split('/');const ap=new Date(+y,m-1,+d);const h=new Date();h.setHours(0,0,0,0);const dif=Math.round((h-ap)/86400000);return dif<-3||dif>3}
+// fora do dia: hoje diferente da data selecionada -> confirma na 1ª vaca de cada dia
+function foraDeEpoca(){const [d,m,y]=D.datas[di].split('/');const ap=new Date(+y,m-1,+d);const h=new Date();h.setHours(0,0,0,0);const dif=Math.round((h-ap)/86400000);return dif!==0}
 function confirmaEpoca(){
   if(!foraDeEpoca())return true;
-  const k='lacto_ok_'+D.datas[di];if(ls(k)==='1')return true;
+  const k='lacto_ok_'+D.datas[di]+'_'+new Date().toDateString();if(ls(k)==='1')return true;
   const hoje=new Date().toLocaleDateString('pt-BR');
-  const ok=confirm(`Hoje é ${hoje} e a aplicação selecionada é ${D.datas[di]}, fora do período normal (3 dias antes a 3 dias depois).\n\nTem certeza de que quer marcar vacas nesta data?`);
+  const ok=confirm(`Hoje é ${hoje} e a aplicação selecionada é ${D.datas[di]}, não é o dia da aplicação.\n\nTem certeza de que quer marcar vacas nesta data?`);
   if(ok)ls(k,'1');return ok}
 function acao(v,tipo){if(!podeMarcar())return false;if(tipo!=='desfez'&&!confirmaEpoca())return false;fila.push({data:D.datas[di],v,acao:tipo,quem:NOME,t:Date.now()});salvaFila();aplicar();render();status(`⟳ ${fila.length} marcação(ões) enviando…`,false);enviar()}
 $('data').innerHTML=D.datas.map((d,i)=>`<option value="${i}">${d.slice(0,5)}</option>`).join('');
