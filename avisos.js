@@ -9,8 +9,10 @@
   const box=document.createElement('div');box.style.cssText='display:grid;gap:8px;margin-top:10px';inn.appendChild(box);
   const app=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
   const mostraCodigo=sub=>{const cod=btoa(JSON.stringify(sub));
-   box.innerHTML='<div style="font-weight:700">Avisos</div><p class="note">Avisos ativos neste celular. Se ainda não mandou, copie o código e mande para o Danilo.</p><textarea id="avcod" readonly rows="3" style="width:100%;font:12px monospace;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:8px">'+cod+'</textarea><button class="ctl" id="avcop" style="grid-template-columns:1fr"><b style="font-size:1.05rem">Copiar código</b></button>';
-   box.querySelector('#avcop').onclick=e=>{const t=box.querySelector('#avcod');(navigator.clipboard?navigator.clipboard.writeText(cod):Promise.reject()).then(()=>e.currentTarget.querySelector('b').textContent='Copiado ✓').catch(()=>{t.select()})}};
+   box.innerHTML='<div style="font-weight:700">Avisos</div><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><span class="note">Ativos neste celular ✓</span><button id="avcop" style="font:600 .9rem var(--body);padding:6px 12px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer">Copiar código</button></div>';
+   box.querySelector('#avcop').onclick=e=>{const b=e.currentTarget;const ok=()=>{b.textContent='Copiado ✓';setTimeout(()=>b.textContent='Copiar código',2500)};
+    const reserva=()=>{const t=document.createElement('textarea');t.value=cod;t.style.cssText='position:fixed;opacity:0';document.body.appendChild(t);t.select();try{document.execCommand('copy');ok()}catch(x){}t.remove()};
+    navigator.clipboard?navigator.clipboard.writeText(cod).then(ok).catch(reserva):reserva()}};
   const inicial=()=>{
    if(!suporta){box.innerHTML='<div style="font-weight:700">Avisos</div><p class="note">Este navegador não aceita avisos.</p>';return}
    if(!app){box.innerHTML='<div style="font-weight:700">Avisos</div><p class="note">Instale o app na tela inicial para receber avisos.</p>';return}
