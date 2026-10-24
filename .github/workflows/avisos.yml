@@ -1,0 +1,25 @@
+name: Avisos diarios
+on:
+  schedule:
+    - cron: '50 9 * * *'   # 6h50 em Brasilia (o GitHub costuma atrasar alguns minutos)
+  workflow_dispatch:
+    inputs:
+      teste:
+        description: 'Mandar aviso de teste agora'
+        type: boolean
+        default: true
+jobs:
+  avisar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-save web-push@3.6.7
+      - run: node avisar.js
+        env:
+          VAPID_PUBLICA: BMo96EQtufIs-vg4sDDIBWDQuaDr5kEUqqvjPc8U19JUFKmJJerboaepEKSy7wzeAUgOIipC3BoAWq0dPxUgbB0
+          VAPID_PRIVADA: ${{ secrets.VAPID_PRIVADA }}
+          ASSINATURAS: ${{ secrets.ASSINATURAS }}
+          TESTE: ${{ github.event_name == 'workflow_dispatch' && inputs.teste && '1' || '0' }}
