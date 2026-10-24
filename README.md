@@ -21,7 +21,7 @@ Site estático (GitHub Pages) instalado como app no celular.
 3. Não inventar critérios (ex.: limites de DEL para trocar de lote). Critérios novos vêm dele.
 
 ## Avisos no celular (regras do Danilo)
-- Secagem: aviso na véspera e no dia. Parto previsto: aviso no dia. Horário: 7h (Brasília). Sem nada no dia, não envia.
+- Secagem: aviso na véspera e no dia. Parto previsto: aviso no dia. Lactotropin: aviso só na véspera ("Lactotropin amanhã (dd/mm): N vacas SIM", lido de lactotropin.json; no dia, às 7h, já estão aplicando). Horário: 7h (Brasília). Sem nada no dia, não envia.
 - Enviado por `.github/workflows/avisos.yml` + `avisar.js`, com prioridade alta (Samsung segura avisos normais).
 - Segredos (Settings → Secrets → Actions): `VAPID_PRIVADA` e `ASSINATURAS` (códigos dos celulares, um por linha; editar substitui tudo).
 - Teste manual: Actions → Avisos diarios → Run workflow; campo opcional "data" simula um dia (dd/mm/aaaa).
