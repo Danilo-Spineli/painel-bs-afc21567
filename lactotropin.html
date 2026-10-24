@@ -119,9 +119,9 @@ const $=id=>document.getElementById(id);
 // data padrão: a próxima data (hoje ou depois); se já passaram todas, a última
 (function(){const h=new Date();h.setHours(0,0,0,0);
   const ds=D.datas.map(s=>{const [d,m,a]=s.split('/');return new Date(+a,m-1,+d)});
-  // fica na aplicação que passou por até 5 dias (atraso/emergência); depois vai para a próxima
+  // fica na aplicação que passou por até 3 dias (atraso/emergência); depois vai para a próxima
   const DIAS=86400000; let k=-1;
-  ds.forEach((x,i)=>{const atras=(h-x)/DIAS; if(atras>=0&&atras<=5)k=i});
+  ds.forEach((x,i)=>{const atras=(h-x)/DIAS; if(atras>=0&&atras<=3)k=i});
   di=k>=0?k:ds.findIndex(x=>x>=h); if(di<0)di=ds.length-1;})();
 const KEY=()=>'lacto_'+D.datas[di];
 const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}};
