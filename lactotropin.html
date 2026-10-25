@@ -185,7 +185,7 @@ function tabs(){
   const curto=l=>({'Geral':'Todas','Primíparas':'Lote N'})[l]||l;
   $('tabs').innerHTML=['Geral',...lotesUsados].map(l=>`<button class="tab" aria-pressed="${l===aba}" data-t="${l}"><span>${curto(l)}</span><small style="font-size:.78rem;font-weight:600;white-space:nowrap">faltam ${n(l)}</small></button>`).join('');
 }
-function blk(v){const p=!!marc[v[0]];return `<button class="cow blk ${p?'p':(vai(v)?'s':'n')}" data-v="${v[0]}"><span class="nb">${v[0]}</span><small>${p?(vai(v)?'aplicada ✓':'sem dose'):(vai(v)?'SIM':'NÃO')}</small>${p&&por[v[0]]?`<small>${por[v[0]]}</small>`:''}</button>`}
+function blk(v){const p=!!marc[v[0]];return `<button class="cow blk ${p?'p':(vai(v)?'s':'n')}" data-v="${v[0]}"><span class="nb">${v[0]}</span><small>${p?(vai(v)?'aplicada ✓':'sem dose'):(vai(v)?'SIM':'NÃO')}</small></button>`}
 function render(){
   const ls=aba==='Geral'?['Geral']:[aba];
   let tp=0,tt=0,ts=0,html='',ph='';
