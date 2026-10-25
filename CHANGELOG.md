@@ -7,7 +7,10 @@ Formato **maior.média.menor** (versionamento semântico), só para controle int
 
 O número `painel-vN` do `sw.js` é outra coisa: é o contador da cópia guardada no celular (sobe a cada mudança que o celular precisa baixar).
 
-**Versão atual: 1.5.12** (24/10/2026)
+**Versão atual: 1.6.0** (24/10/2026)
+
+## 1.6 · Lactotropin por lance (25/10)
+- 1.6.0 · Toque na vaca põe ela no lance (faixa no topo, compartilhada entre os celulares); "Liberar" manda o lance para conferidas, com desfazer. Na 12ª vaca pergunta se é o mesmo lance ou se trocou. Aviso de último lance sem liberar. Aba Todas: conferidas por lance, com etiqueta amarela na vaca de outro lote. Legenda SIM = aplicar / NÃO = não aplicar. "Faltam" só no botão do lote e na linha fina. Atualiza a cada 5 s com lance aberto. Planilha ganhou a aba "lance" (precisa do Apps Script novo).
 
 ## 1.5 · Avisos do Lactotropin (24/10)
 - 1.5.12 · Lactotropin: "aplicada" virou "recebeu ✓" (aviso: "recebeu dose").
