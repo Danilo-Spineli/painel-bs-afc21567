@@ -17,6 +17,14 @@ on:
         description: 'normal = aviso das 7h; lacto = aviso das 6h do Lactotropin'
         required: false
         default: 'normal'
+      mensagem:
+        description: 'Recado livre (se preencher, manda só este texto)'
+        required: false
+        default: ''
+      pagina:
+        description: 'Página que abre ao tocar no recado (ex.: lactotropin.html)'
+        required: false
+        default: ''
 jobs:
   avisar:
     runs-on: ubuntu-latest
@@ -33,4 +41,6 @@ jobs:
           ASSINATURAS: ${{ secrets.ASSINATURAS }}
           HOJE: ${{ github.event_name == 'workflow_dispatch' && inputs.data || '' }}
           TESTE: ${{ github.event_name == 'workflow_dispatch' && '1' || '0' }}
+          MENSAGEM: ${{ github.event_name == 'workflow_dispatch' && inputs.mensagem || '' }}
+          PAGINA: ${{ github.event_name == 'workflow_dispatch' && inputs.pagina || '' }}
           MODO: ${{ github.event.schedule == '40 8 * * *' && 'lacto' || inputs.modo || 'normal' }}

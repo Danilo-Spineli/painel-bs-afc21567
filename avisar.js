@@ -33,6 +33,8 @@ if(!L.length&&!teste){console.log('::notice::Nada para avisar hoje.');process.ex
 const dia=hoje.toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'2-digit'});
 const Dia=dia.charAt(0).toUpperCase()+dia.slice(1);
 const msg={title:teste&&!lacProx?'Fazenda Boa Sorte · teste':'Fazenda Boa Sorte',body:teste?(L.length?L.join('\n'):'Os avisos estão funcionando. Hoje não há secagem nem parto previsto.'):L.join('\n'),url:(lacAviso&&!secHoje.length&&!secAmanha.length&&!parHoje.length)?'lactotropin.html':'reproducao.html'+(secHoje.length||secAmanha.length?'#secagens':parHoje.length?'#partos':'')};
+// recado livre (disparo manual com o campo mensagem): manda só ele
+if(process.env.MENSAGEM){msg.title='Fazenda Boa Sorte';msg.body=process.env.MENSAGEM;msg.url=process.env.PAGINA||'./';L.splice(0,L.length,msg.body)}
 webpush.setVapidDetails('mailto:painel@users.noreply.github.com',process.env.VAPID_PUBLICA,process.env.VAPID_PRIVADA);
 const subs=(process.env.ASSINATURAS||'').split(/[\s,]+/).filter(Boolean).map(c=>JSON.parse(Buffer.from(c,'base64').toString()));
 console.log(`::notice::Aviso: ${msg.title} | ${L.length} linha(s) | ${subs.length} celular(es)`);
