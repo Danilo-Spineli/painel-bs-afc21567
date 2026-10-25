@@ -231,7 +231,7 @@ $('fonte').textContent=`Cronograma Prodap ${D.cronograma.slice(0,5)} · lotes do
 const vai=v=>v[2][di];
 const byV=Object.fromEntries(D.vacas.map(v=>[v[0],v]));
 const lotesUsados=LOTES.filter(l=>D.vacas.some(v=>v[1]===l));
-const curto=l=>({'Geral':'Todas','Primíparas':'Lote N'})[l]||l;
+const curto=l=>({'Geral':'Todas'})[l]||l;
 const naLance=()=>Object.keys(lance).filter(v=>byV[v]).sort((a,b)=>lance[a]-lance[b]);
 function tabs(){
   const n=l=>D.vacas.filter(v=>(l==='Geral'||v[1]===l)&&!marc[v[0]]).length;
@@ -278,7 +278,7 @@ function busca(){
   const ex=D.vacas.filter(v=>v[0]===q), pre=D.vacas.filter(v=>v[0]!==q&&v[0].startsWith(q)), con=D.vacas.filter(v=>!v[0].startsWith(q)&&v[0].includes(q));
   const r=[...ex,...pre,...con];
   $('resBox').hidden=false;
-  $('res').innerHTML=r.map(v=>blk(v).replace('</button>',`<small class="l">${v[1].replace('Lote ','L').replace('Primíparas','N').replace('Pós-parto','PP')}</small></button>`)).join('');
+  $('res').innerHTML=r.map(v=>blk(v).replace('</button>',`<small class="l">${v[1].replace('Lote ','L').replace('Primíparas','Prim').replace('Pós-parto','PP')}</small></button>`)).join('');
   $('resMsg').textContent=r.length?(ex.length?'':'Nenhuma vaca com esse número exato; mostrando parecidas.'):'Brinco não está no cronograma.';
 }
 let trava=0;
