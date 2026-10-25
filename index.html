@@ -473,7 +473,7 @@ if(PRI){
  document.getElementById('sug').innerHTML='<p class="note">Neste controle não houve sugestões de troca de lote.</p>';document.getElementById('so05').innerHTML='';
  document.querySelector('#logistica > p.note').insertAdjacentHTML('afterend','<div class="panel"><p class="note">14/09 foi o primeiro controle registrado: não há configuração anterior para comparar nem dados de reprodução.</p></div>');
 }
-try{const t=localStorage.getItem('tab');if(t)show(t)}catch(e){}
+show('resumo'); // sempre abre no Resumo (não volta para a última aba)
 }
 </script>
 <script src="instalar.js"></script>
