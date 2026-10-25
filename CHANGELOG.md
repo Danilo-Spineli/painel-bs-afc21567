@@ -7,9 +7,10 @@ Formato **maior.média.menor** (versionamento semântico), só para controle int
 
 O número `painel-vN` do `sw.js` é outra coisa: é o contador da cópia guardada no celular (sobe a cada mudança que o celular precisa baixar).
 
-**Versão atual: 1.5.11** (24/10/2026)
+**Versão atual: 1.5.12** (24/10/2026)
 
 ## 1.5 · Avisos do Lactotropin (24/10)
+- 1.5.12 · Lactotropin: "aplicada" virou "recebeu ✓" (aviso: "recebeu dose").
 - 1.5.11 · Lactotropin: tirado o nome de quem marcou de baixo da vaca (continua na planilha).
 - 1.5.10 · Lactotropin: no lugar de "passou", vaca SIM fica "aplicada ✓" e vaca NÃO fica "conferida, sem dose" (só texto; planilha igual).
 - 1.5.9 · Lactotropin: botões de lote grandes de novo (arrastando), com "faltam" embaixo; Primíparas = "Lote N".
