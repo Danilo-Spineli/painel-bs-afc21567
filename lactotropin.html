@@ -175,13 +175,13 @@ function aplicar(){
     else if(acao==='voltou'){delete marc[v];lance[v]=o}};
   const prox=()=>Math.max(0,...Object.values(marc).map(m=>m.n))+1; // próximo nº: depois do maior lance que ainda tem vaca
   servidor.forEach(e=>um(e.acao,e.v,e.lance,hora(e.quando)));
-  fila.filter(f=>f.data===d).forEach(f=>{const h=new Date(f.t).toTimeString().slice(0,5);
+  enviados.concat(fila).filter(f=>f.data===d).forEach(f=>{const h=new Date(f.t).toTimeString().slice(0,5);
     if(f.acao==='liberou'){const n=prox();f.vs.forEach(v=>um('passou',v,n,h))}
     else if(f.acao==='voltou'){f.vs.forEach(v=>um('voltou',v))}
     else um(f.acao,f.v,0,h)});
 }
 function status(t,ok){const e=$('sync');e.textContent=t;e.style.color=ok?'var(--accent)':'var(--nao)';$('dot').style.color=ok?'#2e7d4f':'#c0392b';$('dot').title=t}
-let enviando=false;
+let enviando=false, puxando=false, denovo=false, ultimoOk=0, enviados=[]; // enviados: já gravados na planilha, mas a última leitura ainda não tinha
 async function enviar(){
   if(enviando||!fila.length||!COD)return;enviando=true;
   try{while(fila.length){const f=fila[0];
@@ -191,17 +191,24 @@ async function enviar(){
     const r=await fetch(URL_API,{method:'POST',body:JSON.stringify(corpo)});
     const j=await r.json(); if(j.erro==='codigo'){COD='';ls('lacto_cod','');pedirAcesso();status('⚠ código da fazenda errado',false);break}
     if(j.erro==='acao'){status('⚠ planilha desatualizada: publique a nova versão do Apps Script',false);break}
-    fila.shift();salvaFila();}
+    enviados.push(fila.shift());salvaFila();ultimoOk=Date.now();}
   }catch(e){}
   enviando=false; await puxar();
 }
+// lê a planilha. Uma leitura por vez; resposta que começou antes do último envio confirmado é descartada
+// (ela não tem esse envio e ele já saiu da fila: era isso que fazia o lance "voltar" por um instante)
 async function puxar(){
   if(!COD)return;
+  if(puxando){denovo=true;return}
+  puxando=true;const ini=Date.now(),dRef=D.datas[di];
   try{const r=await fetch(URL_API+'?codigo='+encodeURIComponent(COD)+'&data='+encodeURIComponent(D.datas[di])+'&t='+Date.now(),{cache:'no-store'});
     const j=await r.json(); if(j.erro==='codigo'){COD='';ls('lacto_cod','');pedirAcesso();status('⚠ código da fazenda errado',false);return}
+    if(ini<ultimoOk||dRef!==D.datas[di]){denovo=true;return}
+    enviados=[]; // esta leitura começou depois de todos os envios: já estão nela
     (j.ev||[]).forEach(e=>{e.v=String(e.v).trim();if(e.v.length<3)e.v=e.v.padStart(3,'0');e.lance=+e.lance||0});const novo=JSON.stringify(j.ev||[]); if(novo!==JSON.stringify(servidor)){servidor=j.ev||[];aplicar();render()}
     const hh=new Date().toLocaleTimeString('pt-BR');status(fila.length?`⟳ ${fila.length} marcação(ões) enviando…`:`● sincronizado · ${NOME}${VER?' (só acompanha)':''} · atualizado ${hh} · ${servidor.length} registros`,!fila.length);
   }catch(e){status(`⚠ sem sinal · ${fila.length} marcação(ões) guardada(s) no celular`,false)}
+  finally{puxando=false;if(denovo&&!enviando){denovo=false;setTimeout(puxar,300)}}
 }
 const podeMarcar=()=>!!(NOME&&COD&&!VER);
 // fora do dia: hoje diferente da data selecionada -> confirma na 1ª vaca toda vez que a tela abre
@@ -317,7 +324,7 @@ document.addEventListener('click',e=>{
 });
 $('q').addEventListener('input',busca);
 $('q').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('q').blur()}});
-$('data').addEventListener('change',e=>{di=+e.target.value;servidor=[];aplicar();render();puxar()});
+$('data').addEventListener('change',e=>{di=+e.target.value;servidor=[];enviados=[];aplicar();render();puxar()});
 $('zerar').addEventListener('click',()=>{
   if(!podeMarcar())return;
   const c=(window.prompt?prompt(`Isto zera as marcações e o lance de ${D.datas[di]} em TODOS os celulares.\nDigite o código da fazenda para confirmar:`):null);
