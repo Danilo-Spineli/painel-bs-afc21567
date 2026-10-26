@@ -38,7 +38,8 @@ jobs:
         env:
           VAPID_PUBLICA: BMo96EQtufIs-vg4sDDIBWDQuaDr5kEUqqvjPc8U19JUFKmJJerboaepEKSy7wzeAUgOIipC3BoAWq0dPxUgbB0
           VAPID_PRIVADA: ${{ secrets.VAPID_PRIVADA }}
-          ASSINATURAS: ${{ secrets.ASSINATURAS }}
+          # um celular por linha extra: crie o secret ASSINATURAS_3, _4... e acrescente aqui
+          ASSINATURAS: ${{ secrets.ASSINATURAS }} ${{ secrets.ASSINATURAS_3 }} ${{ secrets.ASSINATURAS_4 }} ${{ secrets.ASSINATURAS_5 }}
           HOJE: ${{ github.event_name == 'workflow_dispatch' && inputs.data || '' }}
           TESTE: ${{ github.event_name == 'workflow_dispatch' && '1' || '0' }}
           MENSAGEM: ${{ github.event_name == 'workflow_dispatch' && inputs.mensagem || '' }}
