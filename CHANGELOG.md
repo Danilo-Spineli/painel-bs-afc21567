@@ -7,7 +7,7 @@ Formato **maior.média.menor** (versionamento semântico), só para controle int
 
 O número `painel-vN` do `sw.js` é outra coisa: é o contador da cópia guardada no celular (sobe a cada mudança que o celular precisa baixar).
 
-**Versão atual: 1.6.3** (24/10/2026)
+**Versão atual: 1.6.3** (26/10/2026)
 
 ## 1.6 · Lactotropin por lance (25/10)
 - 1.6.3 · Painel: sempre abre no Resumo (antes voltava para a última aba aberta, ex.: Vaca).

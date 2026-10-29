@@ -9,7 +9,7 @@ Site estático (GitHub Pages) instalado como app no celular.
 2. Rode `python3 arquivar.py` antes do commit. Ele guarda a cópia em `controles/AAAA-MM-DD.json` e refaz `controles/lista.json`, que alimenta o menu ☰ de controles antigos.
    (O workflow `.github/workflows/arquivar.yml` faz o mesmo automaticamente se alguém esquecer.)
 3. Não mexa em `index.html` para trocar dados. Ele lê tudo dos JSON.
-4. Commits sem nome nem e-mail pessoal (autor: `Painel <painel@users.noreply.github.com>`).
+4. Commits sem nome nem e-mail pessoal (autor `Painel <painel@users.noreply.github.com>` ou `Claude <noreply@anthropic.com>`).
 
 ## Atualizar a reprodução (Prodap)
 - Fonte: PDFs mais recentes da pasta do Drive `01_Prodap_Veterinario/Reproducao` ("Matrizes Gestantes" e "Matrizes a secar").
@@ -25,7 +25,9 @@ Site estático (GitHub Pages) instalado como app no celular.
 ## Avisos no celular (regras do Danilo)
 - Secagem: aviso na véspera e no dia. Parto previsto: aviso no dia. Lactotropin: véspera às 7h ("Amanhã (dd/mm) tem Lactotropin: aplicar em N vacas") e no dia às 6h ("Hoje tem Lactotropin: aplicar em N vacas"), rodada separada no cron 5h40 com MODO=lacto. Teste manual: campo modo = lacto. Sem nada no dia, não envia.
 - Enviado por `.github/workflows/avisos.yml` + `avisar.js`, com prioridade alta (Samsung segura avisos normais).
-- Segredos (Settings → Secrets → Actions): `VAPID_PRIVADA` e `ASSINATURAS` (códigos dos celulares, um por linha; editar substitui tudo).
+- Segredos (Settings → Secrets → Actions): `VAPID_PRIVADA`, `ASSINATURAS` (os dois primeiros celulares) e `ASSINATURAS_3`, `_4`, `_5` (um celular novo em cada; o GitHub não deixa ler um segredo salvo, então cada celular novo vai num segredo novo). Para mais de 5, acrescentar o nome em `avisos.yml`.
+- O relógio do GitHub (`schedule`) atrasa horas. Plano combinado: alarmes do Apps Script disparando o workflow (ver pendências no contexto do Drive). Até lá, disparar à mão quando o horário importar.
+- Recado livre: Run workflow com `mensagem` (texto) e `pagina` (ex.: `lactotropin.html`) manda só esse texto.
 - Teste manual: Actions → Avisos diarios → Run workflow; campo opcional "data" simula um dia (dd/mm/aaaa).
 - O toque no aviso abre a aba Secagens (ou Partos).
 
@@ -34,4 +36,4 @@ Site estático (GitHub Pages) instalado como app no celular.
 - Cronograma novo (vem do Renner/Prodap, PDF na pasta do Drive `06_Lactotropin`): substitua `lactotropin.json` inteiro. Campos: `cronograma` (data do PDF), `datas[]` (dd/mm/aaaa), `vacas[]` = [brinco, [true/false por data]] (true = SIM). Confira os totais de SIM por data com o PDF.
 - Marcações compartilhadas: planilha Google `Lactotropin_Marcacoes` (Drive `06_Lactotropin`) via Apps Script (URL em `lactotropin.html`, `URL_API`). Desde a 1.6 funciona por lance: aba `lance` (entrou/saiu, quem, seq) e aba `marcacoes` (passou com nº do lance, desfez, voltou, zerou, seq). "Liberar" grava o lance inteiro de uma vez (o nº do lance é dado pelo Apps Script). `seq` é a ordem única entre as duas abas. Código do Apps Script: `Lactotropin_AppsScript.gs` (pasta do Drive). Lance de 11 vacas: na 12ª o app pergunta. A planilha guarda o brinco 060 como 60; a tela corrige.
 - Código da fazenda pedido na entrada (o mesmo do Apps Script). Modo "Só acompanhar" não grava nada.
-- A tela consulta a planilha a cada 15 s, só com a tela aberta. O `sw.js` não guarda as respostas da planilha.
+- A tela consulta a planilha a cada 5 s com lance aberto e a cada 15 s sem lance, só com a tela aberta; uma leitura por vez, e leitura que começou antes do último envio é descartada. O `sw.js` não guarda as respostas da planilha.
