@@ -15,6 +15,7 @@ Site estático (GitHub Pages) instalado como app no celular.
 - Fonte: PDFs mais recentes da pasta do Drive `01_Prodap_Veterinario/Reproducao` ("Matrizes Gestantes" e "Matrizes a secar").
 - Substitua `reproducao.json` inteiro (não tem histórico; sempre o Prodap mais recente). Campos: `data`, `gestantes[]` (v, cat, ult, ins, doses, touro, parto, raca, iep, partos), `secar[]` (v, parto, sec), `resumo`, `touros`, `previsao[]` (mês, partos novilhas, partos vacas, total, secagens, matrizes em lactação).
 - Regra do Danilo: vaca que não aparece no último controle de leite não está sendo ordenhada (tratar como seca). A tela cruza isso sozinha com `dados.json`.
+- Antes de substituir, copie do `reproducao.json` atual para o campo `anterior` do novo: `data`, `total`, `is_geral`, `iep_medio`, `partos_medio` (aparece discreto embaixo de cada número do Resumo).
 - Confira: total de gestantes, contagem por categoria e por touro iguais ao PDF.
 
 ## Regras do Danilo (valem para toda atualização)

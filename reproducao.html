@@ -60,6 +60,7 @@ h2{font:700 1.35rem var(--display);margin:0 0 4px;letter-spacing:.01em}
 .kpi b{display:block;font:700 1.7rem var(--display);font-variant-numeric:tabular-nums}
 .kpi small{color:var(--muted);font-size:.85rem;text-transform:uppercase;letter-spacing:.04em}
 .kpi i{font-style:normal;font-size:.85rem;color:var(--muted)}
+.kpi .ant{display:block;margin-top:6px;font-size:.78rem;color:var(--muted);opacity:.8}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0}
 .bars{display:grid;gap:10px}
 .bar-row{display:grid;grid-template-columns:96px 1fr;gap:8px;align-items:center;font-size:1rem}
@@ -255,7 +256,8 @@ Promise.all([fx('reproducao.json'),fx('dados.json').catch(()=>null)]).then(([R,D
  $('subt').textContent=`Prodap de ${R.data}`+(D?` · controle de ${D.cfg.at}`:'');
  const r=R.resumo;
  const lc=D?G.filter(g=>g.cat!=='novilha'&&byC[g.v]).length:r.lactacao, sc=D?G.filter(g=>g.cat!=='novilha'&&!byC[g.v]).length:r.secas;
- $('kpis').innerHTML=[[r.total,'Gestantes',`${lc} em lactação · ${sc} secas · ${r.novilhas} novilhas${D?` (lactação/seca pelo controle de ${D.cfg.at})`:''}`],[r.is_geral.toLocaleString('pt-BR'),'Índice de serviço',`matrizes ${r.is_matrizes.toLocaleString('pt-BR')} · novilhas ${r.is_novilhas.toLocaleString('pt-BR')}`],[r.iep_medio+' d','IEP médio','intervalo entre partos'],[r.partos_medio.toLocaleString('pt-BR'),'Partos por vaca','média, sem novilhas']].map(([b,s,i])=>`<div class="kpi"><small>${s}</small><b>${b}</b><i>${i}</i></div>`).join('');
+ const A=R.anterior,an=v=>A&&v!=null?`<span class="ant">anterior (${A.data.slice(0,5)}): ${v}</span>`:'';
+ $('kpis').innerHTML=[[r.total,'Gestantes',`${lc} em lactação · ${sc} secas · ${r.novilhas} novilhas${D?` (lactação/seca pelo controle de ${D.cfg.at})`:''}`,A&&A.total],[r.is_geral.toLocaleString('pt-BR'),'Índice de serviço',`matrizes ${r.is_matrizes.toLocaleString('pt-BR')} · novilhas ${r.is_novilhas.toLocaleString('pt-BR')}`,A&&A.is_geral.toLocaleString('pt-BR')],[r.iep_medio+' d','IEP médio','intervalo entre partos',A&&A.iep_medio+' d'],[r.partos_medio.toLocaleString('pt-BR'),'Partos por vaca','média, sem novilhas',A&&A.partos_medio.toLocaleString('pt-BR')]].map(([b,s,i,p])=>`<div class="kpi"><small>${s}</small><b>${b}</b><i>${i}</i>${an(p)}</div>`).join('');
  $('prev').innerHTML='<tr><th>Mês</th><th>Partos<br>novilhas</th><th>Partos<br>vacas</th><th>Partos<br>total</th><th>Seca­gens</th><th>Em<br>lactação</th></tr>'+R.previsao.map(p=>`<tr><td>${p[0].replace(/\/20(\d\d)$/,'/$1')}</td><td>${p[1]}</td><td>${p[2]}</td><td><b>${p[3]}</b></td><td>${p[4]}</td><td>${p[5]}</td></tr>`).join('');
  const tm=Math.max(...Object.values(R.touros));
  $('touros').innerHTML=Object.entries(R.touros).sort((a,b)=>b[1]-a[1]).map(([t,n])=>`<div class="touro"><span>${t}</span><div style="padding-right:40px"><div class="bar" style="width:${n/tm*100}%"><span>${n}</span></div></div></div>`).join('');
