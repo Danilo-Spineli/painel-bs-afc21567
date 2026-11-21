@@ -23,6 +23,7 @@ Site estático (GitHub Pages) instalado como app no celular.
 1. Vaca que não aparece no controle de leite não está sendo ordenhada: tratar como seca.
 2. Parto previsto já passou e a vaca não tem medida no último controle: ATENÇÃO (pode estar atrasada e não ter parido). Aparece no topo do Resumo da Reprodução.
 3. Não inventar critérios (ex.: limites de DEL para trocar de lote). Critérios novos vêm dele.
+4. "O que mudou" compara o controle anterior com o atual (lote de cada vaca nas folhas dos dois controles), nunca uma configuração de lotes antiga. `cfg.conf` = data do controle anterior; o resumo vai em `seg_txt` (ex.: "Ficaram no mesmo lote de 22/10: 123 vacas."). Pedido do Danilo em 21/11/2026.
 
 ## Avisos no celular (regras do Danilo)
 - Secagem: aviso na véspera e no dia. Parto previsto: aviso no dia. Lactotropin: véspera às 7h ("Amanhã (dd/mm) tem Lactotropin: aplicar em N vacas") e no dia às 6h ("Hoje tem Lactotropin: aplicar em N vacas"), rodada separada no cron 5h40 com MODO=lacto. Teste manual: campo modo = lacto. Sem nada no dia, não envia.

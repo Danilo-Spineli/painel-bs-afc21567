@@ -446,7 +446,7 @@ const V=v=>`<button class="vlink" data-v="${v}">${v}</button>`;
 const Vs=a=>a.map(V).join(' ');
 document.addEventListener('click',e=>{const b=e.target.closest('.vlink');if(b){openCow(b.dataset.v)}});
 document.getElementById('mud').innerHTML=D.mud.map(r=>`<div class="card" style="cursor:default"><div>${Vs(r[0].split(', '))}</div><span class="note">${C.conf}: ${r[1]} → ${C.at}: <b style="color:var(--fg)">${r[2]}</b></span></div>`).join('');
-document.getElementById('seg').innerHTML=`Seguiram a configuração de ${C.conf}: `+(D.seguiram.length?'movimentações de '+Vs(D.seguiram)+'; ':'')+D.seguiram_extra;
+document.getElementById('seg').innerHTML=(D.seg_txt??(`Seguiram a configuração de ${C.conf}: `+(D.seguiram.length?'movimentações de '+Vs(D.seguiram)+'; ':'')+D.seguiram_extra));
 document.getElementById('so05').innerHTML=`<b>Só em ${C.at} (confirmar no próximo controle):</b><div class="kv" style="margin-top:6px">`+D.so_atual.map(([t,vs])=>`<div><b class="l">${t}</b><div>${Vs(vs)}</div></div>`).join('')+'</div>';
 // prioridades: texto do relatório completo; [[brinco]] vira botão
 const P=D.prioridades.map(([t,x])=>[t,x.replace(/\[\[(\d+)\]\]/g,(m,v)=>V(v))]);
