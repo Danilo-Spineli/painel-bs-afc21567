@@ -253,7 +253,7 @@ fx('controles/lista.json').catch(()=>[]).then(L=>{
  (L||[]).map((c,i)=>`<a class="ctl" style="text-decoration:none" href="./${i?'?c='+c.id:''}"><b>${isoBR(c.id)}</b><small>${c.n} vacas · ${c.tot.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})} L no dia</small><span class="tagc">${i?'ABRIR':'ATUAL'}</span></a>`).join('')+'<div style="font-weight:700;margin-top:14px">Manejo · equipe</div><a class="ctl" style="text-decoration:none" href="lactotropin.html"><b>Lactotropin · aplicação</b><small>marcar no brete as vacas que receberam · pede nome e código</small><span class="tagc">ABRIR</span></a>';
 });
 Promise.all([fx('reproducao.json'),fx('dados.json').catch(()=>null)]).then(([R,D])=>{
- const G=R.gestantes, byG=Object.fromEntries(G.map(g=>[g.v,g])), byC=D?Object.fromEntries(D.vac.map(c=>[c.v,c])):{};
+ const G=R.gestantes, byG=Object.fromEntries(G.map(g=>[g.v,g])), byC=D?Object.fromEntries([...D.vac,...(D.sem_reg||[])].map(c=>[c.v,c])):{};
  $('subt').textContent=`Prodap de ${R.data}`+(D?` · controle de ${D.cfg.at}`:'');
  const r=R.resumo;
  const lc=D?G.filter(g=>g.cat!=='novilha'&&byC[g.v]).length:r.lactacao, sc=D?G.filter(g=>g.cat!=='novilha'&&!byC[g.v]).length:r.secas;
@@ -279,7 +279,7 @@ Promise.all([fx('reproducao.json'),fx('dados.json').catch(()=>null)]).then(([R,D
   if(!g&&!c){el.innerHTML=`<p class="lead">Brinco ${v} não aparece no Prodap de ${R.data} nem no último controle.</p>`;return}
   let h=`<h3 class="num">${v}</h3><div class="gst">${g?`<span class="pill ACIMA">GESTANTE</span><span>touro <b>${g.touro}</b></span>`:`<span class="pill">NÃO CONSTA COMO GESTANTE</span>`}</div>`;
   if(D&&!c&&g&&g.cat!=='novilha')h+=`<p class="note" style="margin:0">Não aparece no controle de ${D.cfg.at}: não estava sendo ordenhada.</p>`;
-  if(c)h+=`<p class="note" style="margin:0">Controle de ${D.cfg.at}: ${c.l} · ${c.tot.toLocaleString('pt-BR',{minimumFractionDigits:2})} L/dia · DEL ${c.de??'-'}</p>`;
+  if(c)h+=`<p class="note" style="margin:0">Controle de ${D.cfg.at}: ${c.l} · ${c.tot!=null?c.tot.toLocaleString('pt-BR',{minimumFractionDigits:2})+' L/dia · DEL '+(c.de??'-'):'ordenhada, mas sem registro completo do dia'}</p>`;
   if(g)h+=`<div class="facts"><div class="fact"><small>Parto previsto</small><b>${g.parto}</b><i>${dias(g.parto)<0&&D?(byC[v]?`data passou · ordenhada em ${D.cfg.at}`:`<span class="passou">${-dias(g.parto)} dias de atraso · sem medida em ${D.cfg.at}</span>`):quando(g.parto)}</i></div><div class="fact"><small>Inseminação</small><b>${g.ins}</b><i>${g.doses} dose${g.doses>1?'s':''}</i></div><div class="fact"><small>Situação</small><b>${st(g)}</b><i>${D&&g.cat!=='novilha'?(byC[v]?`ordenhada em ${D.cfg.at}`:`não ordenhada em ${D.cfg.at}`):''}${g.ult?` · último parto ${g.ult}`:''}</i></div><div class="fact"><small>Partos · IEP</small><b>${g.partos??'-'} parto${g.partos===1?'':'s'}</b><i>${g.iep?'IEP '+g.iep+' dias':'sem IEP'}</i></div></div><p class="note" style="margin:0">Raça: ${g.raca}</p>`;
   if(s)h+=`<div class="box"><small>Secagem</small><b>${s.sec}</b><span>${D&&!byC[v]?`já secou (não ordenhada em ${D.cfg.at})`:quando(s.sec)}</span></div>`;
   if(!g)h+=`<p class="note">Não está na folha de gestantes do Prodap de ${R.data}.</p>`;

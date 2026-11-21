@@ -8,8 +8,9 @@ Site estático (GitHub Pages) instalado como app no celular.
 1. Substitua **só** `dados.json` pelos dados do controle novo (mesmo formato; `cfg.data_iso` = data do controle).
 2. Rode `python3 arquivar.py` antes do commit. Ele guarda a cópia em `controles/AAAA-MM-DD.json` e refaz `controles/lista.json`, que alimenta o menu ☰ de controles antigos.
    (O workflow `.github/workflows/arquivar.yml` faz o mesmo automaticamente se alguém esquecer.)
-3. Não mexa em `index.html` para trocar dados. Ele lê tudo dos JSON.
-4. Commits sem nome nem e-mail pessoal (autor `Painel <painel@users.noreply.github.com>` ou `Claude <noreply@anthropic.com>`).
+3. Vaca ordenhada sem registro completo (ex.: manhã em branco) vai em `sem_reg` (`v`, `l`, `m`, `t`, `n`; turno faltando = null), não em `vac`: fica fora das médias, mas conta como ordenhada nas outras telas e nos avisos.
+4. Não mexa em `index.html` para trocar dados. Ele lê tudo dos JSON.
+5. Commits sem nome nem e-mail pessoal (autor `Painel <painel@users.noreply.github.com>` ou `Claude <noreply@anthropic.com>`).
 
 ## Atualizar a reprodução (Prodap)
 - Fonte: PDFs mais recentes da pasta do Drive `01_Prodap_Veterinario/Reproducao` ("Matrizes Gestantes" e "Matrizes a secar").

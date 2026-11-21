@@ -6,7 +6,7 @@ const R=JSON.parse(fs.readFileSync('reproducao.json','utf8')), D=JSON.parse(fs.r
 const hoje=process.env.HOJE?(([d,m,y])=>new Date(y,m-1,d))(process.env.HOJE.split('/').map(Number)):new Date(new Date().toLocaleString('en-US',{timeZone:'America/Sao_Paulo'}));hoje.setHours(0,0,0,0);
 const dt=s=>{const[d,m,y]=s.split('/').map(Number);return new Date(y<100?2000+y:y,m-1,d)};
 const dif=s=>Math.round((dt(s)-hoje)/864e5);
-const ord=new Set(D.vac.map(c=>c.v));
+const ord=new Set([...D.vac,...(D.sem_reg||[])].map(c=>c.v));
 const L=[];
 const secHoje=R.secar.filter(s=>dif(s.sec)===0), secAmanha=R.secar.filter(s=>dif(s.sec)===1);
 const nota=s=>ord.has(s.v)?s.v:`${s.v} (já fora do controle de ${D.cfg.at})`;

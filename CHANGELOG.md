@@ -7,7 +7,10 @@ Formato **maior.média.menor** (versionamento semântico), só para controle int
 
 O número `painel-vN` do `sw.js` é outra coisa: é o contador da cópia guardada no celular (sobe a cada mudança que o celular precisa baixar).
 
-**Versão atual: 1.7.0** (29/10/2026)
+**Versão atual: 1.8.0** (21/11/2026)
+
+## 1.8 · Controle de 16/11, Prodap de 21/11, cronograma Lactotropin de 18/11 (21/11)
+- 1.8.0 · Controle de 16/11 (151 vacas medidas, 6.802,37 L; planilha da fazenda, não conferida com o papel; 3 números corrigidos pela leitura mais provável). Reprodução com o Prodap de 21/11 (125 gestantes, 29 a secar). Lactotropin com o cronograma de 18/11 (datas 20/11, 02/12 e 14/12). Novo campo `sem_reg` no `dados.json`: vaca ordenhada sem registro completo do dia (739, manhã em branco) conta como ordenhada na Reprodução, no Lactotropin e nos avisos, mas fica fora das médias.
 
 ## 1.7 · Prodap de 28/10 (29/10)
 - 1.7.0 · Reprodução com o Prodap de 28/10 (121 gestantes, 18 a secar). Cada quadro do Resumo mostra discreto o valor do Prodap anterior; no quadro Gestantes, um toque abre a divisão lactação/secas/novilhas do anterior.

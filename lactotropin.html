@@ -134,7 +134,7 @@ h2{margin:4px 0 0;font-size:1rem;color:var(--muted);text-transform:uppercase;let
 <script>
 let D;
 Promise.all([fetch('lactotropin.json',{cache:'no-store'}).then(r=>r.json()),fetch('dados.json',{cache:'no-store'}).then(r=>r.json())]).then(([L,P])=>{
- const lote=Object.fromEntries(P.vac.map(c=>[c.v,c.l]));
+ const lote=Object.fromEntries([...P.vac,...(P.sem_reg||[])].map(c=>[c.v,c.l]));
  D={datas:L.datas,cronograma:L.cronograma,controle:P.cfg.at,vacas:L.vacas.filter(v=>lote[v[0]]).map(v=>[v[0],lote[v[0]],v[1]])};
  init();
 }).catch(()=>{document.body.insertAdjacentHTML('afterbegin','<p style="padding:16px">Não consegui carregar o cronograma. Verifique a internet e abra de novo.</p>')});
